@@ -2,8 +2,10 @@
 
 from django.urls import path, include
 
-from film.views import Film
+from film import views
+
 
 urlpatterns = [
- path('',Film.as_view()),
+ # path('', views.index, name='index'),
+ # path('review/<int:pk>/', views.review_detail, name='review_detail'),
 ]
