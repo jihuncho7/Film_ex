@@ -12,7 +12,7 @@ def review(request):
     film_newest = Film.objects.all().order_by('-created_at')
     film_list = Film.objects.all().order_by('like_user_set')
 
-
-    return render(request, "instagram/index.html", {
+    return render(request, "film/film_list.html", {
         "film_list": film_list,
+        "flim_newset" : film_newest,
     })

@@ -1,5 +1,10 @@
+{% load static %}
 <h2>최신 영화</h2>
 
-{% for film in object_list %}
-{{ film.title }}
+{% for c in film_list %}
+<h3>{{ c.title }}</h3><br>
+{{ c.url }}<br>
+    {{ c.context }} <br>
+    <img src="{{ c.photo }}" alt=""><br>
+
 {% endfor %}
