@@ -5,6 +5,8 @@
 <h3>{{ c.title }}</h3><br>
 {{ c.url }}<br>
     {{ c.context }} <br>
-    <img src="{{ c.photo }}" alt=""><br>
+    {% for g in c.tag_set %}
+    {{ g }}
+    {% endfor %}
 
 {% endfor %}

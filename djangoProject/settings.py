@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'django_extensions',
     'debug_toolbar',
-    'social_django',
+    #'social_django',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',

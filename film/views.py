@@ -7,12 +7,12 @@ from django.views.generic import ListView
 from film.models import Film
 
 
-@login_required
+
 def review(request):
     film_newest = Film.objects.all().order_by('-created_at')
     film_list = Film.objects.all().order_by('like_user_set')
 
-    return render(request, "film/film_list.html", {
+    return render(request, 'film/film_list.html', {
         "film_list": film_list,
         "flim_newset" : film_newest,
     })
