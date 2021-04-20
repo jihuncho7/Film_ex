@@ -4,4 +4,4 @@ django-debug-toolbar
 django-extensions
 django-bootstrap4
 ipython
-allauth
+django-allauth
