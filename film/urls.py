@@ -10,4 +10,8 @@ app_name = 'film'
 urlpatterns = [
 path('',TemplateView.as_view(template_name="film/index.html"), name='index'),
 path('review/', views.review, name='review'),
+
 ]
+
+
+
