@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     # locals apps
     'film',
     'login',
-
 ]
 
 MIDDLEWARE = [
