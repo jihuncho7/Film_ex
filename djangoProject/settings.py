@@ -51,6 +51,10 @@ INSTALLED_APPS = [
     # locals apps
     'film',
     'login',
+
+    'api',
+    'rest_framework',
+    #'knox', # 나중에 회원 가입, 인증에 활용 예정
 ]
 
 MIDDLEWARE = [
@@ -122,7 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
@@ -135,7 +139,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'film', 'static'),
 ]

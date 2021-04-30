@@ -1,18 +1,196 @@
-{% load socialaccount %}
-{% load account %}
-
-{% providers_media_js %}
+<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>film/index.html 페이지 입니다.</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css'%}">
+    <!--원래 있던-->
+<!--    <link href="https://fonts.googleapis.com/css?family=Infinity+Sans&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Infinity+Sans+WM&display=swap" rel="stylesheet"/>-->
+    <!--<link href="./main.css" rel="stylesheet"/>-->
+    <title>Document</title>
 </head>
 <body>
-<!--<h2>{{ user.email }}</h2>-->
-[  메인 페이지  ] <br><br><hr>
-경로: film/index.html
+<div class="v15_2">
+    <div class="v20_12"></div>
+    <div class="v56_179"></div>
+    <div class="v20_25"></div>
+    <div class="v20_13"></div>
+    <div class="name"></div>
+    <div class="v20_39"></div>
+    <div class="v20_54"></div>
+    <div class="name"></div>
+    <div class="v20_55"></div>
+    <div class="v20_58"></div>
+    <span class="v20_14">신규 채용 정보</span>
+    <div class="v20_15"></div>
+    <div class="v20_20"></div>
+    <div class="v20_22"></div>
+    <div class="v20_23"></div>
+    <div class="v20_24"></div>
+    <span class="v20_26">전세계가 열광한 어느 한국 가족의
+아름다운 이야기   ‘미나리’</span><span class="v20_28">신작개봉</span>
+    <div class="v20_32"><span class="v20_31">더 알아보기</span>
+        <div class="v20_37">
+            <div class="v20_38"></div>
+        </div>
+    </div>
+    <span class="v20_53">[영화리뷰] 짧은 독립 영화 리뷰</span><span class="v56_187">[영화리뷰] 미나리의 성공 요인</span><span class="v56_188">[자유게시판] 촬영 스튜디오 대..</span><span
+        class="v56_189">[자유게시판] 현장 촬영 경험이..</span><span class="v20_74">TV CF 광고 조명팀</span><span class="v20_77">영화 및 넷플릭스 - 컨텐츠 홍보</span><span
+        class="v20_123">장편 상업영화 ‘밀수’ 소품팀</span><span class="v20_129">TV 드라마 분장팀 </span><span class="v20_132">재단 홍보 영상 - 나레이션 작가</span>
+    <div class="v20_84"><span class="v56_6"> 추천</span></div>
+    <span class="v20_76">서울 - 구로</span><span class="v20_75">마징가</span><span class="v56_2">서울 - 강남</span><span
+        class="v56_4">경기 - 파주</span><span class="v56_60">서울 - 서초</span><span class="v56_59">경기 - 상암</span><span
+        class="v20_79"> 딜라이트</span><span class="v20_128">외유내강</span><span class="v20_131">TVN </span><span
+        class="v20_134">MONQ</span>
+    <div class="name"></div>
+    <div class="v20_143">
+        <div class="v20_144"></div>
+    </div>
+    <div class="v20_145">
+        <div class="v20_146"></div>
+    </div>
+    <span class="v56_29">신규 배우 프로필</span>
+    <div class="v56_30"></div>
+    <div class="v56_31"></div>
+    <div class="v56_32"></div>
+    <div class="v56_33"></div>
+    <div class="v56_34"></div>
+    <div class="v56_331">
+        <div class="v56_332"></div>
+        <div class="v56_333">
+            <div class="v56_334">
+                <div class="v56_335">
+                    <div class="v56_336"></div>
+                </div>
+            </div>
+        </div>
+        <span class="v56_337">15</span></div>
+    <div class="v56_338">
+        <div class="v56_339"></div>
+        <div class="v56_340">
+            <div class="v56_341">
+                <div class="v56_342">
+                    <div class="v56_343"></div>
+                </div>
+            </div>
+        </div>
+        <span class="v56_344">30</span></div>
+    <div class="v56_345">
+        <div class="v56_346"></div>
+        <div class="v56_347">
+            <div class="v56_348">
+                <div class="v56_349">
+                    <div class="v56_350"></div>
+                </div>
+            </div>
+        </div>
+        <span class="v56_351">15</span></div>
+    <div class="v56_352">
+        <div class="v56_353"></div>
+        <div class="v56_354">
+            <div class="v56_355">
+                <div class="v56_356">
+                    <div class="v56_357"></div>
+                </div>
+            </div>
+        </div>
+        <span class="v56_358">30</span></div>
+    <div class="v56_359">
+        <div class="v56_360"></div>
+        <div class="v56_361">
+            <div class="v56_362">
+                <div class="v56_363">
+                    <div class="v56_364"></div>
+                </div>
+            </div>
+        </div>
+        <span class="v56_365">15</span></div>
+    <div class="v56_366">
+        <div class="v56_367"></div>
+        <div class="v56_368">
+            <div class="v56_369">
+                <div class="v56_370">
+                    <div class="v56_371"></div>
+                </div>
+            </div>
+        </div>
+        <span class="v56_372">15</span></div>
+    <div class="v56_373">
+        <div class="v56_374"></div>
+        <div class="v56_375">
+            <div class="v56_376">
+                <div class="v56_377">
+                    <div class="v56_378"></div>
+                </div>
+            </div>
+        </div>
+        <span class="v56_379">30</span></div>
+    <div class="v56_380">
+        <div class="v56_381"></div>
+        <div class="v56_382">
+            <div class="v56_383">
+                <div class="v56_384">
+                    <div class="v56_385"></div>
+                </div>
+            </div>
+        </div>
+        <span class="v56_386">15</span></div>
+    <div class="v56_387">
+        <div class="v56_388"></div>
+        <div class="v56_389">
+            <div class="v56_390">
+                <div class="v56_391">
+                    <div class="v56_392"></div>
+                </div>
+            </div>
+        </div>
+        <span class="v56_393">30</span></div>
+    <div class="v56_394">
+        <div class="v56_395"></div>
+        <div class="v56_396">
+            <div class="v56_397">
+                <div class="v56_398">
+                    <div class="v56_399"></div>
+                </div>
+            </div>
+        </div>
+        <span class="v56_400">15</span></div>
+    <span class="v56_35">마리아</span><span class="v56_36">제이슨</span><span class="v56_37">헤일리</span><span class="v56_38">프란체스카</span><span
+        class="v56_39">마이크</span>
+    <div class="v56_42"><span class="v56_43"> 추천</span></div>
+    <div class="v56_65"><span class="v56_66"> 추천</span></div>
+    <span class="v56_46">성인 배우</span><span class="v56_48">1992년생</span><span class="v56_49">중장년 배우</span><span
+        class="v56_50">청소년 배우</span><span class="v56_63">성인 배우</span><span class="v56_64">아역 배우</span><span
+        class="v56_51"> 1968년생</span><span class="v56_52">2002년생</span><span class="v56_53">1982년생 </span><span
+        class="v56_54">2008년생</span>
+    <div class="v56_55">
+        <div class="v56_56"></div>
+    </div>
+    <div class="v56_57">
+        <div class="v56_58"></div>
+    </div>
+    <div class="name"></div>
+    <div class="v56_61"><span class="v56_62"> 추천</span></div>
+    <div class="v56_181">
+        <div class="v56_182"></div>
+    </div>
+    <div class="v56_185">
+        <div class="v56_186"></div>
+    </div>
+    <div class="v56_405"></div>
+    <div class="v56_417"><span class="v56_418">기업소개기업소개기업소개기업소개기업소개기업소개기업소개기업소개기업소개기업소개기업소개기업소개
+기업소개기업소개기업소개기업소개기업소개기업소개기업소개기업소개기업소개기업소개기업소개기업소개기업소개기업소개기업소개
+기업소개기업소개기업소개기업소개기업소개기업소개기업소개기업소개기업소개기업소개기업소개
+기업소개기업소개기업소개기업소개기업소개기업소개기업소개기업소개기업소개기업소개</span></div>
+    <div class="v56_406"><span class="v56_407">GamesMode</span>
+        <div class="v56_408">
+            <div class="v56_409"></div>
+        </div>
+    </div>
+    <div class="v56_410"><span class="v56_411">기업소개</span></div>
+    <div class="v56_415"><span class="v56_416">고객센터</span></div>
+    <div class="v56_412"><span class="v56_413">개인정보 처리방침</span></div>
+</div>
 </body>
 </html>
