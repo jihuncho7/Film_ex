@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Film, Tag, Genre, Comment
+from .models import Film, Tag, Genre, Comment,Support
 
 
 # Register your models here.
@@ -19,4 +19,8 @@ class TagAdmin(admin.ModelAdmin):
 @admin.register(Comment)
 class TagAdmin(admin.ModelAdmin):
     list_display = [ 'post', 'author' ]
+    pass
+
+@admin.register(Support)
+class TagAdmin(admin.ModelAdmin):
     pass

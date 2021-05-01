@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
-from film.models import Film
+from film.models import *
+from .serializer import SupportSerializer
+from rest_framework import viewsets
 
 # -- html 페이지 주소 연동해 주는 곳 -----------
 
@@ -61,11 +63,11 @@ def hire_staff_post(request):
     return render(request,'film/hire/staff/staff_post.html')
 
 
+# 고객센터 페이지
 
-# faq 페이지
-def faq(request):
-    return render(request, 'film/faq.html')
-
+class SupportViewSet(viewsets.ModelViewSet):
+    queryset = Support.objects.all()
+    serializer_class =SupportSerializer
 
 def review(request):
     film_newest = Film.objects.all().order_by('-created_at')

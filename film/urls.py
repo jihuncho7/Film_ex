@@ -2,14 +2,18 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 from film import views
 from .views import *
+from rest_framework import routers
 
+from rest_framework.routers import DefaultRouter
 # -- Film의 view 와 멥핑해 주는 곳 -----------------
 
 app_name = 'film'
 
+router = routers.DefaultRouter()
+router.register('support',SupportViewSet)
 
 urlpatterns = [
-    path('',TemplateView.as_view(template_name="film/index.html"), name='index'),
+    path('',TemplateView.as_view(template_name="film/index.html"),include(router.urls), name='index',),
     path('community/',community),
     path('mv_rv_total/',movie_review_total),
     path('mv_rv_detail/', movie_review_detail),
@@ -26,9 +30,7 @@ urlpatterns = [
     path('hire_staff_detail/', hire_staff_detail),
     path('hire_staff_post/', hire_staff_post),
 
-
-
-    path('faq/', faq),
+    path('',include(router.urls)),
 
     path('review/', views.review, name='review'),
 ]

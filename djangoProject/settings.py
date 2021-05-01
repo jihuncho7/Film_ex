@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'film',
     'login',
 
-    'api',
     'rest_framework',
     #'knox', # 나중에 회원 가입, 인증에 활용 예정
 ]

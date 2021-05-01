@@ -67,6 +67,18 @@ class Comment(BaseModel):
     class Meta:
         ordering = ['-id']
 
+class Support(BaseModel): # Notice로 변경해야 하긴 함
+    # 1. 게시글의 id 값
+    id = models.AutoField(primary_key=True, null=False, blank=False)
+    # 2. 제목
+    title = models.CharField(max_length=100)
+    # 3. 작성일
+    created_at = models.DateTimeField(auto_now_add=True)
+    # 4. 작성자 - 추후 수정
+    #user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    # 5. 본문
+    context = models.TextField()
+
 # class Hire_Board(BaseModel): # 구인 공고
 #     title = models.CharField(max_length=20)
 #     pic = models.ImageField(null=True)
