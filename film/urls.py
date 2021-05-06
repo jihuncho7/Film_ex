@@ -13,7 +13,6 @@ router = routers.DefaultRouter()
 router.register('support',SupportViewSet)
 
 urlpatterns = [
-    path('',TemplateView.as_view(template_name="film/index.html"),include(router.urls), name='index',),
     path('community/',community),
     path('mv_rv_total/',movie_review_total),
     path('mv_rv_detail/', movie_review_detail),

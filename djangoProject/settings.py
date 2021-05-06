@@ -40,9 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     # thrid apps
-    'bootstrap4',
     'django_extensions',
     'debug_toolbar',
+    'corsheaders',
     #'social_django',
     'allauth',
     'allauth.account',
@@ -65,8 +65,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
-
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8080',  # vue의 포트 번호
+    'http://127.0.0.1:8080',
+)
 ROOT_URLCONF = 'djangoProject.urls'
 
 TEMPLATES = [
@@ -169,4 +174,10 @@ ACCOUNT_EMAIL_REQUIRED = True
 SOCIALACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_FORMS = {
                     'add_email': 'allauth.account.forms.AddEmailForm',
+}
+
+REST_FREAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'
+    ],
 }

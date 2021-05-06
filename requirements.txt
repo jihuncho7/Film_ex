@@ -5,3 +5,5 @@ django-extensions
 django-bootstrap4
 ipython
 django-allauth
+djangorestframework
+django-cors-headers-3.7.0

@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
+from rest_framework.permissions import AllowAny
+
 from film.models import *
 from .serializer import SupportSerializer
 from rest_framework import viewsets
@@ -68,6 +70,7 @@ def hire_staff_post(request):
 class SupportViewSet(viewsets.ModelViewSet):
     queryset = Support.objects.all()
     serializer_class =SupportSerializer
+    permission_classes = [AllowAny]
 
 def review(request):
     film_newest = Film.objects.all().order_by('-created_at')
