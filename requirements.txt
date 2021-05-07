@@ -2,7 +2,6 @@ django
 pillow
 django-debug-toolbar
 django-extensions
-django-bootstrap4
 ipython
 django-allauth
 djangorestframework
