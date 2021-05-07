@@ -6,5 +6,5 @@ django-bootstrap4
 ipython
 django-allauth
 djangorestframework
-django-cors-headers-3.7.0
+django-cors-headers~=3.7.0
 mysqlclient
