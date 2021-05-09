@@ -7,3 +7,4 @@ django-allauth
 djangorestframework
 django-cors-headers~=3.7.0
 mysqlclient
+django-rest-multiple-models

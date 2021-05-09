@@ -10,7 +10,6 @@ from allauth.account.views import LoginView
 
 urlpatterns = [
     path('admin/', admin.site.urls), # 관리자
-    path('',include('film.urls')), #메인
     path('film/', include('film.urls')),
     path('__debug__/', include(debug_toolbar.urls)),
     path('accounts/', include('allauth.urls')),

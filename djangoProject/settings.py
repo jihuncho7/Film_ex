@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'login',
 
     'rest_framework',
+    'drf_multiple_model',
     #'knox', # 나중에 회원 가입, 인증에 활용 예정
 ]
 
