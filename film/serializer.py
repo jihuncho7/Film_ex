@@ -1,14 +1,59 @@
 from .models import *
 from rest_framework import serializers
 
-class SupportSerializer(serializers.ModelSerializer):
-    # user = serializers.ReadOnlyField(source='user.nickname')
-    class Meta:
-        model = Support
-        fields = ['id', 'title', 'created_at', 'context']
-
 class FilmSerializer(serializers.ModelSerializer):
     # user = serializers.ReadOnlyField(source='user.nickname')
     class Meta:
         model = Film
-        fields = ['__all__']
+        fields = '__all__'
+
+class FreeBoardSerializer(serializers.ModelSerializer):
+    # user = serializers.ReadOnlyField(source='user.nickname')
+    class Meta:
+        model = FreeBoard
+        fields = '__all__'
+
+class CommentSerializer(serializers.ModelSerializer):
+    # user = serializers.ReadOnlyField(source='user.nickname')
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+class FreeBoardSerializer(serializers.ModelSerializer):
+    # user = serializers.ReadOnlyField(source='user.nickname')
+    class Meta:
+        model = FreeBoard
+        fields = '__all__'
+
+class HirePostStaffSerializer(serializers.ModelSerializer):
+    # user = serializers.ReadOnlyField(source='user.nickname')
+    class Meta:
+        model = HirePostStaff
+        fields = '__all__'
+
+class HirePostActorSerializer(serializers.ModelSerializer):
+    # user = serializers.ReadOnlyField(source='user.nickname')
+    class Meta:
+        model = HirePostActor
+        fields = '__all__'
+
+class ResumeStaffSerializer(serializers.ModelSerializer):
+    # user = serializers.ReadOnlyField(source='user.nickname')
+    class Meta:
+        model = ResumeStaff
+        fields = '__all__'
+
+class ResumeActorSerializer(serializers.ModelSerializer):
+    # user = serializers.ReadOnlyField(source='user.nickname')
+    class Meta:
+        model = ResumeActor
+        fields = '__all__'
+
+class QnASerializer(serializers.ModelSerializer):
+    # user = serializers.ReadOnlyField(source='user.nickname')
+    class Meta:
+        model = QnA
+        fields = '__all__'
+
+
+

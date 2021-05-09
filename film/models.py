@@ -26,7 +26,8 @@ class Film(BaseModel):
     def __str__(self):
         return self.title
 
-    def is_like_user(self, user):
+    def is_like_user(self, user): # TODO 나중에 user변수에 현재유저의 pk값을 대입하는 로직을 짜면 된다.
+
         return self.like_user_set.filter(pk=user.pk).exists()
 
     def extract_tag_list(self):
@@ -235,15 +236,3 @@ class QnA(models.Model):
     context = models.TextField()
     is_done = models.BooleanField()
     upload = models.FileField(upload_to="Qna/%Y/%m/%d",blank=True) #TODO settings에 저장 디렉토리 검색하기
-
-class Support(BaseModel): # Notice로 변경해야 하긴 함
-    # 1. 게시글의 id 값
-    id = models.AutoField(primary_key=True, null=False, blank=False)
-    # 2. 제목
-    title = models.CharField(max_length=100)
-    # 3. 작성일
-    created_at = models.DateTimeField(auto_now_add=True)
-    # 4. 작성자 - 추후 수정
-    #user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
-    # 5. 본문
-    context = models.TextField()

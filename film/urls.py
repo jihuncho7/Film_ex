@@ -8,7 +8,7 @@ from rest_framework import routers
 app_name = 'film'
 
 router = routers.DefaultRouter()
-router.register('support',SupportViewSet)
+router.register('Film',FilmViewSet)
 
 urlpatterns = [
     path('',include(router.urls)),
