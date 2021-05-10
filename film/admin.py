@@ -12,5 +12,4 @@ class TagAdmin(admin.ModelAdmin):
     pass
 @admin.register(Comment)
 class TagAdmin(admin.ModelAdmin):
-    list_display = [ 'post', 'author' ]
     pass

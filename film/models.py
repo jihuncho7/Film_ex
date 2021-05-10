@@ -18,7 +18,10 @@ class Film(BaseModel):
     title = models.CharField(max_length=20)
     url = models.URLField(blank=True)
     context = models.TextField()
+    country = models.CharField(max_length=50)
     director = models.CharField(max_length=10)
+    is_picked = models.BooleanField(default=False)
+    on_streaming = models.BooleanField(default=False)
     genre_set = models.ManyToManyField('Genre', blank=True)
     tag_set = models.ManyToManyField('TagFilm', blank=True)
     like_user_set = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,
@@ -41,11 +44,17 @@ class Film(BaseModel):
     def get_absolute_url(self):
         return reverse("film:review_detail", args=[self.pk])
 
+    def get_rate(self):
+        rates = 0
+        for comment in self.comment_set.all():
+            rates += comment.rate
+            return rates
+
     class Meta:
         ordering = ['-created_at']
 
 
-# 영화리뷰모델 in 태그
+# 태그 in 영화리뷰모델
 class TagFilm(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
@@ -61,6 +70,8 @@ class Genre(models.Model):
 
 # 댓글 in 영화리뷰모델
 class Comment(BaseModel):
+
+    rate = models.IntegerField(default=1, choices=((i,i) for i in range(1,6)))
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     post = models.ForeignKey(Film, on_delete=models.CASCADE)
     message = models.TextField()

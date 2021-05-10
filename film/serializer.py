@@ -3,9 +3,16 @@ from rest_framework import serializers
 
 class FilmSerializer(serializers.ModelSerializer):
     # user = serializers.ReadOnlyField(source='user.nickname')
+    rate_show = serializers.SerializerMethodField()
+
+    def get_rate_show(self, instance):
+        return instance.get_rate()
     class Meta:
         model = Film
         fields = '__all__'
+
+
+
 
 class FreeBoardSerializer(serializers.ModelSerializer):
     # user = serializers.ReadOnlyField(source='user.nickname')
