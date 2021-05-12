@@ -11,9 +11,16 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
+class BaseModelExtend(BaseModel):
+    like_user_set = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,
+                                           related_name=f'like_{__qualname__}_set')
+
+    def is_like_user(self, user):  # TODO 나중에 user변수에 현재유저의 pk값을 대입하는 로직을 짜면 된다.
+
+        return self.like_user_set.filter(pk=user.pk).exists()
 
 # 영화 리뷰 페이지
-class Film(BaseModel):
+class Film(BaseModelExtend):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='my_post_set', on_delete=models.CASCADE)
     title = models.CharField(max_length=20)
     url = models.URLField(blank=True)
@@ -24,14 +31,9 @@ class Film(BaseModel):
     on_streaming = models.BooleanField(default=False)
     genre_set = models.ManyToManyField('Genre', blank=True)
     tag_set = models.ManyToManyField('TagFilm', blank=True)
-    like_user_set = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,
-                                           related_name='like_post_set')
+
     def __str__(self):
         return self.title
-
-    def is_like_user(self, user): # TODO 나중에 user변수에 현재유저의 pk값을 대입하는 로직을 짜면 된다.
-
-        return self.like_user_set.filter(pk=user.pk).exists()
 
     def extract_tag_list(self):
         tag_name_list = re.findall(r"#([a-zA-Z\dㄱ-힣]+)", self.context)
@@ -80,13 +82,13 @@ class Comment(BaseModel):
         ordering = ['-id']
 
 # 자유게시판
-class FreeBoard(BaseModel):
+class FreeBoard(BaseModelExtend):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    category = models.TextChoices('freeboardtype','질문 소식')
+    category = models.TextChoices('freeboardtype','정보공유 일상 잡담')
     title = models.CharField( max_length=50)
     context = models.TextField()
     image = models.ImageField(upload_to="freeboard/%Y/%m/%d",blank=True)
-
+    hit = models.IntegerField(default=0)
 # 구인 스태프
 class HirePostStaff(BaseModel):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

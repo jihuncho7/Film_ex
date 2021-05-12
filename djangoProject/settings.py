@@ -101,15 +101,15 @@ WSGI_APPLICATION = 'djangoProject.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR , 'db.sqlite3'),
         # MariaDB 연동
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'team01',
-        'USER': 'team01',
-        'PASSWORD': '01team',
-        'HOST': '49.247.26.104',
-        'PORT': '3306',
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'team01',
+        # 'USER': 'team01',
+        # 'PASSWORD': '01team',
+        # 'HOST': '49.247.26.104',
+        # 'PORT': '3306',
     }
 }
 
