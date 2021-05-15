@@ -6,9 +6,13 @@ from rest_framework.permissions import AllowAny
 from .models import *
 from .serializer import *
 from rest_framework import viewsets
+from itertools import chain # 쿼리셋 append 용
+from rest_framework import filters
+from django.db.models import Count
+### Film Review
 
 class StandardResultsSetPagination(PageNumberPagination):
-    page_size = 1
+    page_size = 15
     page_size_query_param = 'page_size'
     max_page_size = 1000
 # 고객센터 페이지
@@ -16,7 +20,7 @@ class FilmOrderbyRateViewSet(viewsets.ModelViewSet):
     queryset = Film.objects.all()
     serializer_class =FilmSerializer
     permission_classes = [AllowAny] #FIXME 인증 구현해야함
-    pagination_class = StandardResultsSetPagination
+
     global how_many_per_view #  obj 보내는 개수
     how_many_per_view = 15
     def get_queryset(self): # 영화 평점 높은순 처리 로직
@@ -60,3 +64,24 @@ class FilmOnStreamingViewSet(viewsets.ModelViewSet):
         inner_q = qs.order_by('-created_at')[:how_many_per_view]
         qs = qs.filter(pk__in=inner_q)
         return qs
+
+
+### FreeBoard
+
+class FreeBoardViewSet(viewsets.ModelViewSet):
+    queryset = FreeBoard.objects.all()
+    serializer_class = FreeBoardSerializer
+    permission_classes = [AllowAny] #FIXME 인증 구현해야함
+    pagination_class = StandardResultsSetPagination
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title']
+
+    def get_queryset(self): # 추천 상위 5개 올리기
+        qs = super().get_queryset()
+        qs = qs.annotate(num_like=Count('like_user_set'))
+        a = qs.filter(num_like__gte=2)
+        b = qs.filter(num_like_lt=2)
+        qs = a,b
+        return qs
+
+    # TODO 쿼리셋 안에 a와 b 가 merge 되는법 찾기

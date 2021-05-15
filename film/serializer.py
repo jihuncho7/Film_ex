@@ -11,9 +11,6 @@ class FilmSerializer(serializers.ModelSerializer):
         model = Film
         fields = '__all__'
 
-
-
-
 class FreeBoardSerializer(serializers.ModelSerializer):
     # user = serializers.ReadOnlyField(source='user.nickname')
     class Meta:
@@ -28,9 +25,11 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class FreeBoardSerializer(serializers.ModelSerializer):
     # user = serializers.ReadOnlyField(source='user.nickname')
+
     class Meta:
         model = FreeBoard
         fields = '__all__'
+        read_only_fields = ('hit','author','like_user_set')
 
 class HirePostStaffSerializer(serializers.ModelSerializer):
     # user = serializers.ReadOnlyField(source='user.nickname')

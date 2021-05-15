@@ -8,9 +8,12 @@ from rest_framework import routers
 app_name = 'film'
 
 router = routers.DefaultRouter()
+# film review
 router.register(r'FilmOrderbyRate',FilmOrderbyRateViewSet)
 router.register(r'FilmEditorChoice',FilmEditorChoiceViewSet)
 router.register(r'FilmOnStreaming',FilmOnStreamingViewSet)
+# freeboard
+router.register('freeboard',FreeBoardViewSet)
 urlpatterns = [
     path(r'',include(router.urls)),
     #path('review/', views.review, name='review'),

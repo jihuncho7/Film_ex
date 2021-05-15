@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'debug_toolbar',
     'corsheaders',
+    'django_filters',
     #'social_django',
     'allauth',
     'allauth.account',
@@ -186,6 +187,7 @@ ACCOUNT_FORMS = {
 
 REST_FREAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'
+        'rest_framework.permissions.IsAuthenticated',
+'django_filters.rest_framework.DjangoFilterBackend',
     ],
 }

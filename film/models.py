@@ -3,6 +3,7 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
+
 # 작성, 변경날짜
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -18,6 +19,10 @@ class BaseModelExtend(BaseModel):
     def is_like_user(self, user):  # TODO 나중에 user변수에 현재유저의 pk값을 대입하는 로직을 짜면 된다.
 
         return self.like_user_set.filter(pk=user.pk).exists()
+
+    def get_likes(self):
+
+        return self.like_user_set.all().count()
 
 # 영화 리뷰 페이지
 class Film(BaseModelExtend):
@@ -89,6 +94,10 @@ class FreeBoard(BaseModelExtend):
     context = models.TextField()
     image = models.ImageField(upload_to="freeboard/%Y/%m/%d",blank=True)
     hit = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['-created_at']
+
 # 구인 스태프
 class HirePostStaff(BaseModel):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
