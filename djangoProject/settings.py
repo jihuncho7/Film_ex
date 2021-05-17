@@ -49,6 +49,10 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.kakao',
+    'rest_auth',
+    'rest_framework.authtoken',
+    'rest_auth.registration',
     # locals apps
     'film',
     'login',
@@ -190,4 +194,18 @@ REST_FREAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
 'django_filters.rest_framework.DjangoFilterBackend',
     ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ],
+}
+
+SOCIALACCOUNT_PROVIDERS = {
+    'kakao': {
+        'APP': {
+            'client_id': '5a366d7cd6acbacfd0e05e29e98a031e',
+            'secret': '580695',
+            'key': ''
+        }
+    }
 }

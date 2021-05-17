@@ -16,5 +16,6 @@ router.register(r'FilmOnStreaming',FilmOnStreamingViewSet)
 router.register('freeboard',FreeBoardViewSet)
 urlpatterns = [
     path(r'',include(router.urls)),
+
     #path('review/', views.review, name='review'),
 ]

@@ -83,7 +83,8 @@ class FreeBoardViewSet(viewsets.ModelViewSet):
     def get_queryset(self): # 추천 상위 5개 올리기
         qs = super().get_queryset()
         qs = qs.annotate(num_like=Count('like_user_set'))
-        a = qs.filter(num_like__gte=2)
-        b = qs.filter(num_like__lt=2)
-        c = a | b
-        return c
+        a = qs.filter(num_like__gte=2)[:5]
+        b = qs.filter(num_like__lt=2).exclude(pk__in=a)
+        c = list(chain(a,b))
+        qs = qs.filter(pk__in=c)
+        return qs
