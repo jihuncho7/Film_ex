@@ -9,6 +9,7 @@ from rest_framework import viewsets
 from itertools import chain # 쿼리셋 append 용
 from rest_framework import filters
 from django.db.models import Count
+
 ### Film Review
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -55,7 +56,7 @@ class FilmEditorChoiceViewSet(viewsets.ModelViewSet):
 
 class FilmOnStreamingViewSet(viewsets.ModelViewSet):
     queryset = Film.objects.all()
-    serializer_class =FilmSerializer
+    serializer_class = FilmSerializer
     permission_classes = [AllowAny] #FIXME 인증 구현해야함
 
     def get_queryset(self): # 영화 에디터 픽순
@@ -73,15 +74,16 @@ class FreeBoardViewSet(viewsets.ModelViewSet):
     serializer_class = FreeBoardSerializer
     permission_classes = [AllowAny] #FIXME 인증 구현해야함
     pagination_class = StandardResultsSetPagination
-    filter_backends = [filters.SearchFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title']
+
+    ordering_fields = ('num_like')
+    ordering = ('-num_like','-created_at')
 
     def get_queryset(self): # 추천 상위 5개 올리기
         qs = super().get_queryset()
         qs = qs.annotate(num_like=Count('like_user_set'))
         a = qs.filter(num_like__gte=2)
-        b = qs.filter(num_like_lt=2)
-        qs = a,b
-        return qs
-
-    # TODO 쿼리셋 안에 a와 b 가 merge 되는법 찾기
+        b = qs.filter(num_like__lt=2)
+        c = a | b
+        return c
