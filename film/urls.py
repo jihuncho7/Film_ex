@@ -14,6 +14,8 @@ router.register(r'FilmEditorChoice',FilmEditorChoiceViewSet)
 router.register(r'FilmOnStreaming',FilmOnStreamingViewSet)
 # freeboard
 router.register('freeboard',FreeBoardViewSet)
+router.register('hirepoststaff',HirePostStaffViewSet)
+
 urlpatterns = [
     path(r'',include(router.urls)),
 

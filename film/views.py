@@ -75,7 +75,7 @@ class FreeBoardViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny] #FIXME 인증 구현해야함
     pagination_class = StandardResultsSetPagination
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['title']
+    search_fields = ['title','category','context']
 
     ordering_fields = ('num_like')
     ordering = ('-num_like','-created_at')
@@ -88,3 +88,9 @@ class FreeBoardViewSet(viewsets.ModelViewSet):
         c = list(chain(a,b))
         qs = qs.filter(pk__in=c)
         return qs
+
+class HirePostStaffViewSet(viewsets.ModelViewSet):
+    queryset = HirePostStaff.objects.all()
+    serializer_class = HirePostStaffSerializer
+    permission_classes = [AllowAny]  # FIXME 인증 구현해야함
+    # pagination_class = StandardResultsSetPagination
