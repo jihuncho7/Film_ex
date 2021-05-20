@@ -22,6 +22,10 @@ class FilmOrderbyRateViewSet(viewsets.ModelViewSet):
     serializer_class =FilmSerializer
     permission_classes = [AllowAny] #FIXME 인증 구현해야함
 
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)
+
     global how_many_per_view #  obj 보내는 개수
     how_many_per_view = 15
     def get_queryset(self): # 영화 평점 높은순 처리 로직
@@ -47,6 +51,10 @@ class FilmEditorChoiceViewSet(viewsets.ModelViewSet):
     serializer_class =FilmSerializer
     permission_classes = [AllowAny] #FIXME 인증 구현해야함
 
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)
+
     def get_queryset(self): # 영화 에디터 픽순
         qs = super().get_queryset()
         qs = qs.filter(is_picked=True)
@@ -58,6 +66,10 @@ class FilmOnStreamingViewSet(viewsets.ModelViewSet):
     queryset = Film.objects.all()
     serializer_class = FilmSerializer
     permission_classes = [AllowAny] #FIXME 인증 구현해야함
+
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)
 
     def get_queryset(self): # 영화 에디터 픽순
         qs = super().get_queryset()
@@ -80,6 +92,10 @@ class FreeBoardViewSet(viewsets.ModelViewSet):
     ordering_fields = ('num_like')
     ordering = ('-num_like','-created_at')
 
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)
+
     def get_queryset(self): # 추천 상위 5개 올리기
         qs = super().get_queryset()
         qs = qs.annotate(num_like=Count('like_user_set'))
@@ -93,4 +109,27 @@ class HirePostStaffViewSet(viewsets.ModelViewSet):
     queryset = HirePostStaff.objects.all()
     serializer_class = HirePostStaffSerializer
     permission_classes = [AllowAny]  # FIXME 인증 구현해야함
-    # pagination_class = StandardResultsSetPagination
+    pagination_class = StandardResultsSetPagination
+
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)
+
+    def get_queryset(self): # 신규 상위 5개 올리기
+        qs = super().get_queryset()
+        a = qs.exclude(image='')[:5]
+        b = qs.exclude(pk__in=a)
+        c = list(chain(a, b))
+        qs = qs.filter(pk__in=c)
+        return qs
+
+class HirePostActorViewSet(viewsets.ModelViewSet):
+    queryset = HirePostActor.objects.all()
+    serializer_class = HirePostActorSerializer
+    permission_classes = [AllowAny]  # FIXME 인증 구현해야함
+    pagination_class = StandardResultsSetPagination
+
+
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)

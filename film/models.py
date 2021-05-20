@@ -121,7 +121,7 @@ class TagFreeBoard(models.Model):
 
 # 구인 스태프
 class HirePostStaff(BaseModelExtend):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='authors')
     thumbs = models.IntegerField(blank=True,default=0)
     Choices = ('영화', '영화'), ('드라마', '드라마'), ('뮤직비디오', '뮤직비디오'), ('광고', '광고')
     category = models.CharField(max_length=10, choices=Choices)
@@ -153,6 +153,9 @@ class HirePostStaff(BaseModelExtend):
             tag_list.append(tag)
         return tag_list
 
+    class Meta:
+        ordering = ['-created_at']
+
 # 태그 in 구인스태프
 class TagPostStaff(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -182,7 +185,7 @@ class HirePostActor(BaseModelExtend):
     tag_set = models.ManyToManyField('TagPostActor', blank=True)
 
     def __str__(self):
-        return str(self.thumbs)
+        return self.title
 
     def extract_tag_list(self):
         tag_name_list = re.findall(r"#([a-zA-Z\dㄱ-힣]+)", self.context)
