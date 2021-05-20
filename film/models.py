@@ -176,7 +176,7 @@ class HirePostActor(BaseModelExtend):
     company_desc = models.TextField()
     company_url = models.URLField(blank=True)
     job_position = models.CharField(max_length=50)  # 카테고리 쓸지 고민
-    detail = models.TextField()
+    context = models.TextField()
     requirement = models.TextField()
     advantage = models.TextField(blank=True)
     job_loca = models.CharField(max_length=100, blank=True)
@@ -213,7 +213,7 @@ class ResumeStaff(BaseModelExtend):
     Choices = ('영화', '영화'), ('드라마', '드라마'), ('뮤직비디오', '뮤직비디오'), ('광고', '광고')
     category = models.CharField(max_length=10, choices=Choices)
     name = models.CharField(max_length=20)
-    upload = models.FileField(blank=True)
+    upload = models.FileField(blank=True, upload_to='Resume/Staff/%Y/%m/%d')
     title = models.CharField( max_length=50)
     tel = models.CharField(max_length=50, blank=True)
     email = models.EmailField()
@@ -222,8 +222,8 @@ class ResumeStaff(BaseModelExtend):
     #  prize TODO Workexp 와 동일한 고민
     # etc  TODO Workexp 와 동일한 고민
     Choices = ('촬영', '촬영'), ('연출', '연출'), ('시나리오', '시나리오'), ('음악', '음악'),
-    ('편집', '편집'),('애니메이션', '애니메이션'),('특수효과', '특수효과'),('헤어-메이크업', '헤어-메이크업'),
-    ('미술', '미술'),('스턴트', '스턴트'),('외국어', '외국어'),('안무', '안무'),('경영지원', '경영지원'),('기타', '기타')
+    ('편집', '편집'), ('애니메이션', '애니메이션'), ('특수효과', '특수효과'), ('헤어-메이크업', '헤어-메이크업'),
+    ('미술', '미술'), ('스턴트', '스턴트'), ('외국어', '외국어'), ('안무', '안무'), ('경영지원', '경영지원'), ('기타', '기타')
     category = models.CharField(max_length=10, choices=Choices)
     resume_url = models.URLField(blank=True)
     tag_set = models.ManyToManyField('TagResumeStaff', blank=True)
@@ -254,15 +254,13 @@ class ResumeActor(BaseModelExtend):## 액터스용
     title = models.CharField(max_length=50)
     name = models.CharField(max_length=20)
     age = models.IntegerField()
-    gender = models.TextChoices('gendertype','여 남')
-    # education
-    # prize
-    # etc
+    gender_choices = ('남자', '남자'), ('여자', '여자')
+    gender = models.CharField(max_length=4, choices=gender_choices)
     resume_url = models.URLField(blank=True)
     context = models.TextField()
     agency = models.CharField(max_length=50, blank=True)
-    Choices = ('아역', '아역'), ('청소년', '청소년'), ('성인', '성인'), ('중장년', '중장년')
-    category = models.CharField(max_length=10, choices=Choices)
+    category_choices = ('아역', '아역'), ('청소년', '청소년'), ('성인', '성인'), ('중장년', '중장년')
+    category = models.CharField(max_length=10, choices=category_choices)
     image = models.ImageField(upload_to="Resume/Actor/%Y/%m/%d")
     tag_set = models.ManyToManyField('TagResumeActor', blank=True)
 
@@ -287,4 +285,4 @@ class QnA(models.Model):
     date = models.DateTimeField()
     context = models.TextField()
     is_done = models.BooleanField()
-    upload = models.FileField(upload_to="Qna/%Y/%m/%d",blank=True) #TODO settings에 저장 디렉토리 검색하기
+    upload = models.FileField(upload_to="Qna/%Y/%m/%d", blank=True)  # TODO settings에 저장 디렉토리 검색하기
