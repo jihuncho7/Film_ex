@@ -94,9 +94,8 @@ class FreeBoardViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title', 'category', 'context']
-
-    ordering_fields = ('num_like')
-    ordering = ('-num_like', '-created_at')
+    ordering_fields = ['num_like']
+    ordering = ['-num_like', '-created_at']
 
     def perform_create(self, serializer):
         author = self.request.user
@@ -146,7 +145,6 @@ class ResumeStaffViewSet(viewsets.ModelViewSet):
     queryset = ResumeStaff.objects.all()
     serializer_class = ResumeStaffSerializer
     permission_classes = [AllowAny]  # FIXME 인증 구현해야함
-    pagination_class = StandardResultsSetPagination
 
     def perform_create(self, serializer):
         author = self.request.user
@@ -157,7 +155,6 @@ class ResumeActorViewSet(viewsets.ModelViewSet):
     queryset = ResumeActor.objects.all()
     serializer_class = ResumeActorSerializer
     permission_classes = [AllowAny]  # FIXME 인증 구현해야함
-    pagination_class = StandardResultsSetPagination
 
     def perform_create(self, serializer):
         author = self.request.user

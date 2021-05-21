@@ -32,8 +32,11 @@ class Film(BaseModelExtend):
     context = models.TextField()
     country = models.CharField(max_length=50)
     director = models.CharField(max_length=10)
+    actors = models.CharField(max_length=100,blank=True)
+    staffs = models.CharField(max_length=100,blank=True)
     is_picked = models.BooleanField(default=False)
     on_streaming = models.BooleanField(default=False)
+    grade = models.CharField(max_length=10)
     genre_set = models.ManyToManyField('Genre', blank=True)
     tag_set = models.ManyToManyField('TagFilm', blank=True)
 
@@ -85,7 +88,14 @@ class Comment(BaseModel):
     post = models.ForeignKey(Film, on_delete=models.CASCADE)
     message = models.TextField()
 
+    class Meta:
+        ordering = ['-id']
 
+class CommentInComment(BaseModel):
+
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    post = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    message = models.TextField()
 
     class Meta:
         ordering = ['-id']
@@ -98,11 +108,10 @@ class FreeBoard(BaseModelExtend):
     title = models.CharField( max_length=50)
     context = models.TextField()
     image = models.ImageField(upload_to="freeboard/%Y/%m/%d",blank=True)
-
-    tag_set = models.ManyToManyField('TagFreeBoard', blank=True)
+    tag_set = models.ManyToManyField('TagFreeBoard',blank=True)
 
     def extract_tag_list(self):
-        tag_name_list = re.findall(r"#([a-zA-Z\dㄱ-힣]+)", self.context)
+        tag_name_list = re.findall(r"#([a-zA-Z\dㄱ-힣]+)",self.context)
         tag_list = []
         for tag_name in tag_name_list:
             tag, _ = TagFreeBoard.objects.get_or_create(name=tag_name)
@@ -119,6 +128,25 @@ class TagFreeBoard(models.Model):
     def __str__(self):
         return self.name
 
+# 댓글 in 자유게시판
+class CommentFreeBoard(BaseModel):
+
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    post = models.ForeignKey(FreeBoard, on_delete=models.CASCADE)
+    message = models.TextField()
+
+    class Meta:
+        ordering = ['-created_at']
+
+class CommentInCommentFreeBoard(BaseModel):
+
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    post = models.ForeignKey(CommentFreeBoard, on_delete=models.CASCADE)
+    message = models.TextField()
+
+    class Meta:
+        ordering = ['-id']
+
 # 구인 스태프
 class HirePostStaff(BaseModelExtend):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='authors')
@@ -126,7 +154,8 @@ class HirePostStaff(BaseModelExtend):
     Choices = ('영화', '영화'), ('드라마', '드라마'), ('뮤직비디오', '뮤직비디오'), ('광고', '광고')
     category = models.CharField(max_length=10, choices=Choices)
     title = models.CharField( max_length=50)
-    image = models.ImageField(upload_to="HirePost/Staff/%Y/%m/%d",blank=True)
+    image = models.ImageField(upload_to="HirePost/Staff/image/%Y/%m/%d",blank=True)
+    upload = models.FileField(upload_to="HirePost/Staff/upload/%Y/%m/%d",blank=True)
     company = models.CharField(max_length=20)
     company_loca = models.CharField( max_length=50,blank=True)
     company_desc = models.TextField()
@@ -137,11 +166,12 @@ class HirePostStaff(BaseModelExtend):
     advantage = models.TextField(blank=True)
     job_loca = models.CharField(max_length=100,blank=True)
     deadline = models.DateTimeField()
-    # 카테고리 시급,주급,일급,월급 초이스
+    manager = models.CharField(max_length=10)
+    payment = models.IntegerField()
 
+    # 카테고리 시급,주급,일급,월급 초이스
     Choices = ('시급', '시급'), ('일급', '일급'), ('주급', '주급'), ('월급', '월급')
     category = models.CharField(max_length=10, choices=Choices)
-    payment = models.IntegerField()
 
     tag_set = models.ManyToManyField('TagPostStaff', blank=True)
 
@@ -150,7 +180,7 @@ class HirePostStaff(BaseModelExtend):
         tag_list = []
         for tag_name in tag_name_list:
             tag, _ = TagPostStaff.objects.get_or_create(name=tag_name)
-            tag_list.append(tag)
+            tag_list.append(tag_name)
         return tag_list
 
     class Meta:
@@ -163,6 +193,26 @@ class TagPostStaff(models.Model):
     def __str__(self):
         return self.name
 
+# 댓글 in 구인스태프
+class CommentHirePostStaff(BaseModel):
+
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    post = models.ForeignKey(HirePostStaff, on_delete=models.CASCADE)
+    message = models.TextField()
+
+    class Meta:
+        ordering = ['-created_at']
+
+class CommentInCommentHirePostStaff(BaseModel):
+
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    post = models.ForeignKey(CommentHirePostStaff, on_delete=models.CASCADE)
+    message = models.TextField()
+
+    class Meta:
+        ordering = ['-id']
+
+
 # 구인 액터
 class HirePostActor(BaseModelExtend):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -170,7 +220,8 @@ class HirePostActor(BaseModelExtend):
     Choices = ('영화', '영화'), ('드라마', '드라마'), ('뮤직비디오', '뮤직비디오'), ('광고', '광고')
     category = models.CharField(max_length=10, choices=Choices)
     title = models.CharField( max_length=50)
-    image = models.ImageField(upload_to="HirePost/Actor/%Y/%m/%d",blank=True)
+    image = models.ImageField(upload_to="HirePost/Actor/image/%Y/%m/%d",blank=True)
+    upload = models.FileField(upload_to="HirePost/Actor/%Y/upload/%m/%d",blank=True)
     company = models.CharField(max_length=20)
     company_loca = models.CharField(max_length=50,blank=True)
     company_desc = models.TextField()
@@ -182,6 +233,7 @@ class HirePostActor(BaseModelExtend):
     job_loca = models.CharField(max_length=100, blank=True)
     deadline = models.DateTimeField()
     payment = models.IntegerField()
+    manager = models.CharField(max_length=10)
     tag_set = models.ManyToManyField('TagPostActor', blank=True)
 
     def __str__(self):
@@ -192,7 +244,7 @@ class HirePostActor(BaseModelExtend):
         tag_list = []
         for tag_name in tag_name_list:
             tag, _ = TagPostActor.objects.get_or_create(name=tag_name)
-            tag_list.append(tag)
+            tag_list.append(tag_name)
         return tag_list
 
 # 태그 in 구인 액터
@@ -202,10 +254,25 @@ class TagPostActor(models.Model):
     def __str__(self):
         return self.name
 
-# class Profile(BaseModel): 유저 프로필
-#     nickname
-#     name
-#     image
+# 댓글 in 구인 액터
+class CommentHirePostActor(BaseModel):
+
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    post = models.ForeignKey(HirePostActor, on_delete=models.CASCADE)
+    message = models.TextField()
+
+    class Meta:
+        ordering = ['-created_at']
+
+class CommentInCommentHirePostActor(BaseModel):
+
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    post = models.ForeignKey(CommentHirePostActor, on_delete=models.CASCADE)
+    message = models.TextField()
+
+    class Meta:
+        ordering = ['-id']
+
 
 # 이력서 스태프
 class ResumeStaff(BaseModelExtend):
@@ -213,14 +280,12 @@ class ResumeStaff(BaseModelExtend):
     Choices = ('영화', '영화'), ('드라마', '드라마'), ('뮤직비디오', '뮤직비디오'), ('광고', '광고')
     category = models.CharField(max_length=10, choices=Choices)
     name = models.CharField(max_length=20)
-    upload = models.FileField(blank=True, upload_to='Resume/Staff/%Y/%m/%d')
+    image = models.ImageField(upload_to='Resume/Staff/image/%Y/%m/%d',blank=True)
+    upload = models.FileField(blank=True, upload_to='Resume/Staff/upload/%Y/%m/%d')
     title = models.CharField( max_length=50)
     tel = models.CharField(max_length=50, blank=True)
     email = models.EmailField()
     context = models.TextField()
-    # education TODO Workexp 와 동일한 고민
-    #  prize TODO Workexp 와 동일한 고민
-    # etc  TODO Workexp 와 동일한 고민
     Choices = ('촬영', '촬영'), ('연출', '연출'), ('시나리오', '시나리오'), ('음악', '음악'),
     ('편집', '편집'), ('애니메이션', '애니메이션'), ('특수효과', '특수효과'), ('헤어-메이크업', '헤어-메이크업'),
     ('미술', '미술'), ('스턴트', '스턴트'), ('외국어', '외국어'), ('안무', '안무'), ('경영지원', '경영지원'), ('기타', '기타')
@@ -233,7 +298,7 @@ class ResumeStaff(BaseModelExtend):
         tag_list = []
         for tag_name in tag_name_list:
             tag, _ = TagResumeStaff.objects.get_or_create(name=tag_name)
-            tag_list.append(tag)
+            tag_list.append(tag_name)
         return tag_list
 
 # 태그 in 이력서 스탭
@@ -250,18 +315,23 @@ class TagResumeStaff(models.Model):
 
 # 이력서 액터
 class ResumeActor(BaseModelExtend):## 액터스용
+
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    title = models.CharField(max_length=50)
     name = models.CharField(max_length=20)
     age = models.IntegerField()
+    height = models.IntegerField()
     gender_choices = ('남자', '남자'), ('여자', '여자')
     gender = models.CharField(max_length=4, choices=gender_choices)
     resume_url = models.URLField(blank=True)
     context = models.TextField()
     agency = models.CharField(max_length=50, blank=True)
+    career = models.TextField(blank=True)
     category_choices = ('아역', '아역'), ('청소년', '청소년'), ('성인', '성인'), ('중장년', '중장년')
     category = models.CharField(max_length=10, choices=category_choices)
-    image = models.ImageField(upload_to="Resume/Actor/%Y/%m/%d")
+    image = models.ImageField(upload_to="Resume/Actor/image/%Y/%m/%d")
+    upload = models.FileField(upload_to="Resume/Actor/upload/%Y/%m/%d",blank=True)
+    tel = models.CharField(max_length=50, blank=True)
+    email = models.EmailField(blank=True)
     tag_set = models.ManyToManyField('TagResumeActor', blank=True)
 
     def extract_tag_list(self):
@@ -269,8 +339,11 @@ class ResumeActor(BaseModelExtend):## 액터스용
         tag_list = []
         for tag_name in tag_name_list:
             tag, _ = TagResumeActor.objects.get_or_create(name=tag_name)
-            tag_list.append(tag)
+            tag_list.append(tag_name)
         return tag_list
+
+
+
 # 태그 in 이력서 액터
 class TagResumeActor(models.Model):
     name = models.CharField(max_length=50, unique=True)
