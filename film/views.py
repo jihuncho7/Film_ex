@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from .models import *
 from .serializer import *
@@ -90,7 +90,7 @@ class FilmOnStreamingViewSet(viewsets.ModelViewSet):
 class FreeBoardViewSet(viewsets.ModelViewSet):
     queryset = FreeBoard.objects.all()
     serializer_class = FreeBoardSerializer
-    permission_classes = [AllowAny]  # FIXME 인증 구현해야함
+    permission_classes = [IsAuthenticated]  # FIXME 인증 구현해야함
     pagination_class = StandardResultsSetPagination
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title', 'category', 'context']
@@ -98,8 +98,9 @@ class FreeBoardViewSet(viewsets.ModelViewSet):
     ordering = ['-num_like', '-created_at']
 
     def perform_create(self, serializer):
-        author = self.request.user
-        serializer.save(author=author)
+
+        serializer.save(author=self.request.user.email)
+        return super().perform_create(serializer)
 
     def get_queryset(self):  # 추천 상위 5개 올리기
         qs = super().get_queryset()
