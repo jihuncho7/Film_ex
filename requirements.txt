@@ -4,7 +4,10 @@ django-debug-toolbar
 django-extensions
 ipython
 django-allauth
-djangorestframework
+djangorestframework~=3.11.2
 django-cors-headers~=3.7.0
 mysqlclient
 django-rest-multiple-models
+django-filter~=2.4.0
+djangorestframework-jwt
+django-rest-auth

@@ -12,8 +12,13 @@ urlpatterns = [
     path('admin/', admin.site.urls), # 관리자
     path('film/', include('film.urls')),
     path('__debug__/', include(debug_toolbar.urls)),
-    path('accounts/', include('allauth.urls')),
     path('api/',include("api.urls")),
+    path('login/', include('login.urls')),
+    path('account/', include('rest_auth.urls')),
+    path('account/registration/', include('rest_auth.registration.urls')),
+    path('account/', include('allauth.urls')),
+    # url(r'account/registration/confirm-email/(?P<key>.+)/$', confirm_email, name='confirm_email'),
+    path('', include('django.contrib.auth.urls')),
     # path('',LoginView.as_view(template_name="login/index.html"))
     #path('social/', include('social_django.urls')),
     #path('google/', include('google_app.urls')),

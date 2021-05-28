@@ -9,10 +9,13 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import datetime
 import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from django.conf import settings
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -25,7 +28,7 @@ SECRET_KEY = 'django-insecure-p^_*8q*auqe(p^@5-6q#$_&i0nj8031ex#2acjs_hdtesqzom2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -43,11 +46,16 @@ INSTALLED_APPS = [
     'django_extensions',
     'debug_toolbar',
     'corsheaders',
+    'django_filters',
     #'social_django',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.kakao',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    'rest_framework.authtoken',
     # locals apps
     'film',
     'login',
@@ -61,18 +69,24 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+
 ]
-CORS_ORIGIN_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:8080',  # vue의 포트 번호
-    'http://127.0.0.1:8080',
-)
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+# CORS_ORIGIN_WHITELIST = (
+#     'http://localhost:8080',  # vue의 포트 번호
+#     'http://127.0.0.1:8080',
+#     'http://localhost:8000',  # django의 포트 번호
+#     'http://127.0.0.1:8000',
+# )
+
+
 ROOT_URLCONF = 'djangoProject.urls'
 
 TEMPLATES = [
@@ -178,14 +192,44 @@ AUTHENTICATION_BACKENDS = [
 ]
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/film/'
-ACCOUNT_EMAIL_REQUIRED = True
 SOCIALACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_FORMS = {
                     'add_email': 'allauth.account.forms.AddEmailForm',
 }
+AUTH_USER_MODEL = 'login.User'
+# ACCOUNT_USER_MODEL_USERNAME_FIELD = None # 사용자 이름 대신 이메일 사용
+ACCOUNT_EMAIL_REQUIRED = True # 사용자 등록시 확인 링크로 이메일 확인 메시지 보내기
+ACCOUNT_UNIQUE_EMAIL = True # 메일 고유성 확인
+# ACCOUNT_USERNAME_REQUIRED = True # 가입시 사용자 이름 입력 X
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 REST_FREAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'
+        'rest_framework.permissions.IsAuthenticated',
+        'django_filters.rest_framework.DjangoFilterBackend',
     ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ],
+}
+JWT_AUTH = {
+    'JWT_SECRET_KEY': settings.SECRET_KEY,
+    'JWT_ALGORITHM': 'HS256',
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=300),
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
+}
+# REST_USE_JWT = True
+
+SOCIALACCOUNT_PROVIDERS = {
+    'kakao': {
+        'APP': {
+            'client_id': '445eccf206b046c8d5adf4bfba7b1e54',
+            'secret': '585842',
+            'key': ''
+        }
+    }
 }

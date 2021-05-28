@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Film,  Genre, Comment
+from .models import Film, Genre, Comment, FreeBoard
 
 
 # Register your models here.
@@ -12,4 +12,8 @@ class TagAdmin(admin.ModelAdmin):
     pass
 @admin.register(Comment)
 class TagAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(FreeBoard)
+class FreeBoardAdmin(admin.ModelAdmin):
     pass
