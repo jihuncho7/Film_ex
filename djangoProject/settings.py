@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-p^_*8q*auqe(p^@5-6q#$_&i0nj8031ex#2acjs_hdtesqzom2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -69,18 +69,24 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+
 ]
-CORS_ORIGIN_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:8080',  # vue의 포트 번호
-    'http://127.0.0.1:8080',
-)
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+# CORS_ORIGIN_WHITELIST = (
+#     'http://localhost:8080',  # vue의 포트 번호
+#     'http://127.0.0.1:8080',
+#     'http://localhost:8000',  # django의 포트 번호
+#     'http://127.0.0.1:8000',
+# )
+
+
 ROOT_URLCONF = 'djangoProject.urls'
 
 TEMPLATES = [

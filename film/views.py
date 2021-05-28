@@ -90,17 +90,18 @@ class FilmOnStreamingViewSet(viewsets.ModelViewSet):
 class FreeBoardViewSet(viewsets.ModelViewSet):
     queryset = FreeBoard.objects.all()
     serializer_class = FreeBoardSerializer
-    permission_classes = [IsAuthenticated]  # FIXME 인증 구현해야함
+    # permission_classes = [IsAuthenticated]  # FIXME 인증 구현해야함
+    permission_classes = [AllowAny]  # FIXME 인증 구현해야함
     pagination_class = StandardResultsSetPagination
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title', 'category', 'context']
     ordering_fields = ['num_like']
     ordering = ['-num_like', '-created_at']
 
-    def perform_create(self, serializer):
-
-        serializer.save(author=self.request.user.email)
-        return super().perform_create(serializer)
+    # def perform_create(self, serializer):
+    #
+    #     serializer.save(author=self.request.user)
+    #     return super().perform_create(serializer)
 
     def get_queryset(self):  # 추천 상위 5개 올리기
         qs = super().get_queryset()

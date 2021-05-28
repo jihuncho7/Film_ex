@@ -15,11 +15,14 @@ from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify
 # ]
 
 urlpatterns = [
-    # path('rest-auth/', include('rest_auth.urls')),
+    path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
+    # path('rest-auth/kakao/', include('rest_auth.registration.urls')),
+
     # 회원가입
     # path('rest-auth/registration', RegisterView.as_view(), name='rest_register'),
     path('kakao/',KakaoLoginView.as_view(), name='kakao_login'),
     path('kakao/callback/', KakaoCallbackView.as_view(), name='kakao_callback'),
     path('kakao/todjango/', KakaoToDjangoLogin.as_view(), name='kakao_todjango_login'),
+
 ]
