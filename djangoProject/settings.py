@@ -53,9 +53,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.kakao',
-    'dj_rest_auth',
-    'dj_rest_auth.registration',
     'rest_framework.authtoken',
+    'rest_auth',
     # locals apps
     'film',
     'login',
@@ -204,24 +203,25 @@ ACCOUNT_UNIQUE_EMAIL = True # 메일 고유성 확인
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
-REST_FREAMEWORK = {
+REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.permissions.AllowAny',
+        # 'django_filters.rest_framework.DjangoFilterBackend',
+    'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+
     ],
 }
-JWT_AUTH = {
-    'JWT_SECRET_KEY': settings.SECRET_KEY,
-    'JWT_ALGORITHM': 'HS256',
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=300),
-    'JWT_ALLOW_REFRESH': True,
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
-}
+# JWT_AUTH = {
+#     'JWT_SECRET_KEY': settings.SECRET_KEY,
+#     'JWT_ALGORITHM': 'HS256',
+#     'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=300),
+#     'JWT_ALLOW_REFRESH': True,
+#     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
+# }
 # REST_USE_JWT = True
 
 SOCIALACCOUNT_PROVIDERS = {

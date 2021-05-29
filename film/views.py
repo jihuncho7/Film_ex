@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
@@ -88,15 +89,21 @@ class FilmOnStreamingViewSet(viewsets.ModelViewSet):
 ### FreeBoard
 
 class FreeBoardViewSet(viewsets.ModelViewSet):
+    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
     queryset = FreeBoard.objects.all()
     serializer_class = FreeBoardSerializer
-    # permission_classes = [IsAuthenticated]  # FIXME 인증 구현해야함
-    permission_classes = [AllowAny]  # FIXME 인증 구현해야함
+    permission_classes = [IsAuthenticated]  # FIXME 인증 구현해야함
+    # permission_classes = [AllowAny]  # FIXME 인증 구현해야함
     pagination_class = StandardResultsSetPagination
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter,]
     search_fields = ['title', 'category', 'context']
     ordering_fields = ['num_like']
     ordering = ['-num_like', '-created_at']
+
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)
+
 
     # def perform_create(self, serializer):
     #
