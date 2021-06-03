@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
@@ -47,7 +48,8 @@ class FilmOrderbyRateViewSet(viewsets.ModelViewSet):
                 objpk.append(arr[i][1])
             except:
                 pass
-        qs = Film.objects.filter(pk__in=objpk)
+        objpk_list = list(objpk)
+        qs = Film.objects.filter(pk__in=objpk_list)
         return qs
 
 
@@ -64,7 +66,8 @@ class FilmEditorChoiceViewSet(viewsets.ModelViewSet):
         qs = super().get_queryset()
         qs = qs.filter(is_picked=True)
         inner_q = qs.order_by('-created_at')[:how_many_per_view]
-        qs = qs.filter(pk__in=inner_q)
+        inner_q_list = list(inner_q)
+        qs = qs.filter(pk__in=inner_q_list)
         return qs
 
 
@@ -81,22 +84,29 @@ class FilmOnStreamingViewSet(viewsets.ModelViewSet):
         qs = super().get_queryset()
         qs = qs.filter(on_streaming=True)
         inner_q = qs.order_by('-created_at')[:how_many_per_view]
-        qs = qs.filter(pk__in=inner_q)
+        inner_q_list = list(inner_q)
+        qs = qs.filter(pk__in=inner_q_list)
         return qs
 
 
 ### FreeBoard
 
 class FreeBoardViewSet(viewsets.ModelViewSet):
+    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
     queryset = FreeBoard.objects.all()
     serializer_class = FreeBoardSerializer
-    # permission_classes = [IsAuthenticated]  # FIXME 인증 구현해야함
-    permission_classes = [AllowAny]  # FIXME 인증 구현해야함
+    permission_classes = [IsAuthenticated]  # FIXME 인증 구현해야함
+    # permission_classes = [AllowAny]  # FIXME 인증 구현해야함
     pagination_class = StandardResultsSetPagination
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter,]
     search_fields = ['title', 'category', 'context']
     ordering_fields = ['num_like']
     ordering = ['-num_like', '-created_at']
+
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)
+
 
     # def perform_create(self, serializer):
     #
@@ -107,7 +117,8 @@ class FreeBoardViewSet(viewsets.ModelViewSet):
         qs = super().get_queryset()
         qs = qs.annotate(num_like=Count('like_user_set'))
         a = qs.filter(num_like__gte=2)[:5]
-        b = qs.filter(num_like__lt=2).exclude(pk__in=a)
+        a_list = list(a)
+        b = qs.filter(num_like__lt=2).exclude(pk__in=a_list)
         c = list(chain(a, b))
         qs = qs.filter(pk__in=c)
         return qs
