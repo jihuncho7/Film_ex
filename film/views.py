@@ -94,7 +94,7 @@ class FilmOnStreamingViewSet(viewsets.ModelViewSet):
 ### FreeBoard
 
 class FreeBoardViewSet(viewsets.ModelViewSet):
-    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
+    # authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
     queryset = FreeBoard.objects.all()
     serializer_class = FreeBoardSerializer
     permission_classes = [IsAuthenticated]  # FIXME 인증 구현해야함
@@ -139,7 +139,8 @@ class HirePostStaffViewSet(viewsets.ModelViewSet):
     def get_queryset(self): # 신규 상위 5개 올리기
         qs = super().get_queryset()
         a = qs.exclude(image='')[:5]
-        b = qs.exclude(pk__in=a)
+        a_list = list(a)
+        b = qs.exclude(pk__in=a_list)
         c = list(chain(a, b))
         qs = qs.filter(pk__in=c)
         return qs
