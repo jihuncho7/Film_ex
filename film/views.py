@@ -43,7 +43,7 @@ class FilmOrderbyRateViewSet(viewsets.ModelViewSet):
             arr.append([o.get_rate(), o.pk])
 
         arr.sort(reverse=True)
-        for i in range(6 - 1):
+        for i in range(how_many_per_view - 1):
             try:
                 objpk.append(arr[i][1])
             except:
