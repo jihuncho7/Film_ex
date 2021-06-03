@@ -39,7 +39,7 @@ class Film(BaseModelExtend):
     grade = models.CharField(max_length=10)
     genre_set = models.ManyToManyField('Genre', blank=True)
     tag_set = models.ManyToManyField('TagFilm', blank=True)
-
+    image = models.ImageField(upload_to="film/%Y/%m/%d", blank=True)
     def __str__(self):
         return self.title
 

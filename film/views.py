@@ -48,7 +48,8 @@ class FilmOrderbyRateViewSet(viewsets.ModelViewSet):
                 objpk.append(arr[i][1])
             except:
                 pass
-        qs = Film.objects.filter(pk__in=objpk)
+        objpk_list = list(objpk)
+        qs = Film.objects.filter(pk__in=objpk_list)
         return qs
 
 
@@ -65,7 +66,8 @@ class FilmEditorChoiceViewSet(viewsets.ModelViewSet):
         qs = super().get_queryset()
         qs = qs.filter(is_picked=True)
         inner_q = qs.order_by('-created_at')[:how_many_per_view]
-        qs = qs.filter(pk__in=inner_q)
+        inner_q_list = list(inner_q)
+        qs = qs.filter(pk__in=inner_q_list)
         return qs
 
 
@@ -82,7 +84,8 @@ class FilmOnStreamingViewSet(viewsets.ModelViewSet):
         qs = super().get_queryset()
         qs = qs.filter(on_streaming=True)
         inner_q = qs.order_by('-created_at')[:how_many_per_view]
-        qs = qs.filter(pk__in=inner_q)
+        inner_q_list = list(inner_q)
+        qs = qs.filter(pk__in=inner_q_list)
         return qs
 
 
@@ -114,7 +117,8 @@ class FreeBoardViewSet(viewsets.ModelViewSet):
         qs = super().get_queryset()
         qs = qs.annotate(num_like=Count('like_user_set'))
         a = qs.filter(num_like__gte=2)[:5]
-        b = qs.filter(num_like__lt=2).exclude(pk__in=a)
+        a_list = list(a)
+        b = qs.filter(num_like__lt=2).exclude(pk__in=a_list)
         c = list(chain(a, b))
         qs = qs.filter(pk__in=c)
         return qs
