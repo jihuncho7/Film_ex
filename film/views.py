@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
-
+from django.db.models import Case, When
 from .models import *
 from .serializer import *
 from rest_framework import viewsets
@@ -43,13 +43,15 @@ class FilmOrderbyRateViewSet(viewsets.ModelViewSet):
             arr.append([o.get_rate(), o.pk])
 
         arr.sort(reverse=True)
-        for i in range(how_many_per_view - 1):
+        for i in range(6 - 1):
             try:
                 objpk.append(arr[i][1])
             except:
                 pass
         objpk_list = list(objpk)
+        preserved = Case(*[When(pk=pk, then=pos) for pos,pk in enumerate(objpk)])
         qs = Film.objects.filter(pk__in=objpk_list)
+        qs = qs.order_by(preserved, '-created_at')
         return qs
 
 
