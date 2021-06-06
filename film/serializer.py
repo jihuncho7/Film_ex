@@ -19,6 +19,22 @@ class FilmSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = read_only_fields_global
 
+    # views.py 에서 필드 수정 할 수 있게 하는 커스텀 쿼리
+    def __init__(self, *args, **kwargs):
+        # Don't pass the 'fields' arg up to the superclass
+        fields = kwargs.pop('fields', None)
+
+        # Instantiate the superclass normally
+        super(FilmSerializer, self).__init__(*args, **kwargs)
+
+        if fields is not None:
+            # Drop any fields that are not specified in the `fields` argument.
+            allowed = set(fields)
+            existing = set(self.fields)
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
+
+
 class CommentSerializer(serializers.ModelSerializer):
     author_username = serializers.ReadOnlyField(source='author.username')
 
@@ -27,7 +43,7 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('author','post')
 
-class FreeBoardSerializer(serializers.ModelSerializer):
+class FreeBoardSerializer(serializers.ModelSerializer, object):
     # user = serializers.ReadOnlyField(source='user.nickname')
     get_likes = serializers.SerializerMethodField()
     category = serializers.SerializerMethodField()
@@ -53,6 +69,21 @@ class FreeBoardSerializer(serializers.ModelSerializer):
                   'tag_set'
                   )
         read_only_fields = read_only_fields_global
+
+    # views.py 에서 필드 수정 할 수 있게 하는 커스텀 쿼리
+    def __init__(self, *args, **kwargs):
+        # Don't pass the 'fields' arg up to the superclass
+        fields = kwargs.pop('fields', None)
+
+        # Instantiate the superclass normally
+        super(FreeBoardSerializer, self).__init__(*args, **kwargs)
+
+        if fields is not None:
+            # Drop any fields that are not specified in the `fields` argument.
+            allowed = set(fields)
+            existing = set(self.fields)
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
 
 
 class HirePostStaffSerializer(serializers.ModelSerializer):

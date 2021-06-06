@@ -4,6 +4,9 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.db.models import Case, When
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from .models import *
 from .serializer import *
 from rest_framework import viewsets
@@ -20,7 +23,10 @@ class StandardResultsSetPagination(PageNumberPagination):
     max_page_size = 1000
 
 
-# 고객센터 페이지
+"""
+게시판 뷰
+"""
+
 class FilmOrderbyRateViewSet(viewsets.ModelViewSet):
     queryset = Film.objects.all()
     serializer_class = FilmSerializer
@@ -97,8 +103,8 @@ class FreeBoardViewSet(viewsets.ModelViewSet):
     # authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
     queryset = FreeBoard.objects.all()
     serializer_class = FreeBoardSerializer
-    permission_classes = [IsAuthenticated]  # FIXME 인증 구현해야함
-    # permission_classes = [AllowAny]  # FIXME 인증 구현해야함
+    # permission_classes = [IsAuthenticated]  # FIXME 인증 구현해야함
+    permission_classes = [AllowAny]  # FIXME 인증 구현해야함
     pagination_class = StandardResultsSetPagination
     filter_backends = [filters.SearchFilter, filters.OrderingFilter,]
     search_fields = ['title', 'category', 'context']
@@ -186,3 +192,19 @@ class QnAViewSet(viewsets.ModelViewSet):
         author = self.request.user
         serializer.save(author=author)
 
+
+"""
+
+기능적인 뷰들
+
+"""
+class Home_banner(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+
+        qs = Film.objects.filter(is_picked=True)[:2]
+        qs2 = FreeBoard.objects.all().order_by('-created_at')[:2]
+        a = FilmSerializer(qs, many=True,fields=('title', 'id'))
+        b = FreeBoardSerializer(qs2, many=True,fields=('title', 'id'))
+        return Response(a.data+b.data)

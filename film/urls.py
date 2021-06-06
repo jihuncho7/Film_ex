@@ -24,6 +24,7 @@ router.register('resumeactor',ResumeActorViewSet)
 router.register('qna',QnAViewSet)
 urlpatterns = [
     path(r'',include(router.urls)),
+    path('homebanner/', Home_banner.as_view(), name='homebanner')
 
     #path('review/', views.review, name='review'),
 ]

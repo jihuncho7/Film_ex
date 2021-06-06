@@ -50,7 +50,7 @@ class Film(BaseModelExtend):
             tag, _ = TagFilm.objects.get_or_create(name=tag_name)
             tag_list.append(tag)
 
-        self.tag_set.add(tag)
+        self.tag_set.add(*tag_list) #TODO tag_set db에 넣는 쿼리 어디서처리할지? 일단 작동확인하기
         return tag_list
 
     def get_absolute_url(self):
