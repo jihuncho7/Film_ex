@@ -116,6 +116,10 @@ class FreeBoardViewSet(viewsets.ModelViewSet):
         author = self.request.user
         serializer.save(author=author)
 
+    # def perform_update(self, serializer, pk):
+    #     if self.get_object(pk).like_user_set.all().filter(id=self.request.data['like_id']):
+ #TODO 할차례 0607 참조 https://docs.djangoproject.com/en/3.2/ref/models/instances/#specifying-which-fields-to-save
+
 
     # def perform_create(self, serializer):
     #

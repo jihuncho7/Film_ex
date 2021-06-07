@@ -49,8 +49,8 @@ class FreeBoardSerializer(serializers.ModelSerializer, object):
     category = serializers.SerializerMethodField()
     tag_set = serializers.SerializerMethodField()
     author_username = serializers.ReadOnlyField(source='author.username')
+    is_like_user = serializers.SerializerMethodField()
 
-    # is_like_user = serializers.SerializerMethodField() todo 유저 글쓴이 여부
     def get_get_likes(self, obj):
         return obj.get_likes()
 
@@ -60,13 +60,14 @@ class FreeBoardSerializer(serializers.ModelSerializer, object):
     def get_tag_set(self, obj):
         return obj.extract_tag_list()
 
-    # def get_is_like_user(self, instance): todo 유저 글쓴이 여부
-    #     return instance.is_like_user()
+    def get_is_like_user(self, instance):
+        return instance.is_like_user(self.context['request'].user)
+
     class Meta:
         model = FreeBoard
         fields = ('id','hit','author_username','get_likes','created_at',
                   'updated_at','title','context','image','category',
-                  'tag_set'
+                  'tag_set','is_like_user','like_user_set'
                   )
         read_only_fields = read_only_fields_global
 
