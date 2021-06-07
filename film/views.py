@@ -23,12 +23,10 @@ class StandardResultsSetPagination(PageNumberPagination):
     max_page_size = 1000
 
 
-<<<<<<< Updated upstream
+
 """
 게시판 뷰
 """
-=======
->>>>>>> Stashed changes
 
 class FilmOrderbyRateViewSet(viewsets.ModelViewSet):
     queryset = Film.objects.all()

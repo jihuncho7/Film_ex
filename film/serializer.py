@@ -4,7 +4,7 @@ from .models import *
 from rest_framework import serializers
 
 
-read_only_fields_global = ('hit','author','like_user_set','tag_set')
+read_only_fields_global = (['author'])
 
 class FilmSerializer(serializers.ModelSerializer):
 
