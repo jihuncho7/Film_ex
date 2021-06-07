@@ -109,7 +109,6 @@ class FreeBoard(BaseModelExtend):
     context = models.TextField()
     image = models.ImageField(upload_to="freeboard/%Y/%m/%d",blank=True)
     tag_set = models.ManyToManyField('TagFreeBoard',blank=True)
-
     def extract_tag_list(self):
         tag_name_list = re.findall(r"#([a-zA-Z\dㄱ-힣]+)",self.context)
         tag_list = []

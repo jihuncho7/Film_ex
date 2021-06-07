@@ -23,9 +23,12 @@ class StandardResultsSetPagination(PageNumberPagination):
     max_page_size = 1000
 
 
+<<<<<<< Updated upstream
 """
 게시판 뷰
 """
+=======
+>>>>>>> Stashed changes
 
 class FilmOrderbyRateViewSet(viewsets.ModelViewSet):
     queryset = Film.objects.all()
@@ -137,6 +140,8 @@ class HirePostStaffViewSet(viewsets.ModelViewSet):
     serializer_class = HirePostStaffSerializer
     permission_classes = [AllowAny]  # FIXME 인증 구현해야함
     pagination_class = StandardResultsSetPagination
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, ]
+    search_fields = ['title', 'author_username', 'context']
 
     def perform_create(self, serializer):
         author = self.request.user
@@ -157,6 +162,8 @@ class HirePostActorViewSet(viewsets.ModelViewSet):
     serializer_class = HirePostActorSerializer
     permission_classes = [AllowAny]  # FIXME 인증 구현해야함
     pagination_class = StandardResultsSetPagination
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, ]
+    search_fields = ['title', 'author_username', 'context']
 
     def perform_create(self, serializer):
         author = self.request.user
@@ -167,6 +174,8 @@ class ResumeStaffViewSet(viewsets.ModelViewSet):
     queryset = ResumeStaff.objects.all()
     serializer_class = ResumeStaffSerializer
     permission_classes = [AllowAny]  # FIXME 인증 구현해야함
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, ]
+    search_fields = ['title', 'author_username', 'context']
 
     def perform_create(self, serializer):
         author = self.request.user
@@ -177,6 +186,8 @@ class ResumeActorViewSet(viewsets.ModelViewSet):
     queryset = ResumeActor.objects.all()
     serializer_class = ResumeActorSerializer
     permission_classes = [AllowAny]  # FIXME 인증 구현해야함
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, ]
+    search_fields = ['title', 'author_username', 'context']
 
     def perform_create(self, serializer):
         author = self.request.user
