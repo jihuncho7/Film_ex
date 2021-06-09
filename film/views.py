@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, get_object_or_404
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.db.models import Case, When
@@ -9,7 +11,7 @@ from rest_framework.views import APIView
 
 from .models import *
 from .serializer import *
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from itertools import chain # 쿼리셋 append 용
 from rest_framework import filters
 from django.db.models import Count
@@ -116,9 +118,30 @@ class FreeBoardViewSet(viewsets.ModelViewSet):
         author = self.request.user
         serializer.save(author=author)
 
-    # def perform_update(self, serializer, pk):
-    #     if self.get_object(pk).like_user_set.all().filter(id=self.request.data['like_id']):
- #TODO 할차례 0607 참조 https://docs.djangoproject.com/en/3.2/ref/models/instances/#specifying-which-fields-to-save
+    # def perform_update(self, serializer):
+    #     try:
+    #         if self.request.data['like_id']:
+    #             data = self.get_object().like_user_set.all()
+    #             user_id = self.request.user.pk
+    #             if data.filter(id=user_id):
+    #                 self.get_object().like_user_set.remove(user_id)
+    #             else:
+    #                 self.get_object().like_user_set.add(str(user_id))
+    #     except ObjectDoesNotExist:
+    #         print('추천을 위한 PATCH는 작동하지 않았음')
+    @action(detail=True, methods=['POST'])
+    def like(self, request, pk):
+        post = self.get_object()
+        post.like_user_set.add(self.request.user.pk)
+        return Response(status.HTTP_201_CREATED)
+
+    @like.mapping.delete
+    def unlike(self,request, pk):
+        post = self.get_object()
+        post.like_user_set.remove(self.request.user.pk)
+        return Response(status.HTTP_204_NO_CONTENT)
+
+ #TODO 할차례 0607 참조
 
 
     # def perform_create(self, serializer):
