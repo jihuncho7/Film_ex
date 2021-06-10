@@ -202,6 +202,11 @@ class ResumeStaffViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, ]
     search_fields = ['title', 'author_username', 'context']
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(author=self.request.user.pk)
+        return qs
+
     def perform_create(self, serializer):
         author = self.request.user
         serializer.save(author=author)
@@ -213,6 +218,11 @@ class ResumeActorViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]  # FIXME 인증 구현해야함
     filter_backends = [filters.SearchFilter, filters.OrderingFilter, ]
     search_fields = ['title', 'author_username', 'context']
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs.filter(author=self.request.user.pk)
+        return qs
 
     def perform_create(self, serializer):
         author = self.request.user
