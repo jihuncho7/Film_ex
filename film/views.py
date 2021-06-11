@@ -112,7 +112,7 @@ class FreeBoardViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter,]
     search_fields = ['title', 'category', 'context']
     ordering_fields = ['num_like']
-    ordering = ['-num_like', '-created_at']
+    # ordering = ['-num_like', '-created_at']
 
     def perform_create(self, serializer):
         author = self.request.user
@@ -152,11 +152,12 @@ class FreeBoardViewSet(viewsets.ModelViewSet):
     def get_queryset(self):  # 추천 상위 5개 올리기
         qs = super().get_queryset()
         qs = qs.annotate(num_like=Count('like_user_set'))
-        a = qs.filter(num_like__gte=2)[:5]
+        a = qs.filter(num_like__gte=2).order_by('-num_like')[:5]
         a_list = list(a)
         b = qs.filter(num_like__lt=2).exclude(pk__in=a_list)
         c = list(chain(a, b))
-        qs = qs.filter(pk__in=c)
+        preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(c)])
+        qs = qs.filter(pk__in=c).order_by(preserved)
         return qs
 
 

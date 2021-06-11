@@ -129,7 +129,7 @@ class ResumeStaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = ResumeStaff
         fields = '__all__'
-
+        read_only_fields = read_only_fields_global
 
 class ResumeActorSerializer(serializers.ModelSerializer):
     author_username = serializers.ReadOnlyField(source='author.username')
@@ -137,6 +137,7 @@ class ResumeActorSerializer(serializers.ModelSerializer):
     class Meta:
         model = ResumeActor
         fields = '__all__'
+        read_only_fields = read_only_fields_global
 
 
 class QnASerializer(serializers.ModelSerializer):
@@ -145,3 +146,4 @@ class QnASerializer(serializers.ModelSerializer):
     class Meta:
         model = QnA
         fields = '__all__'
+        read_only_fields = read_only_fields_global
