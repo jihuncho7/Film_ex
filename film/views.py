@@ -3,6 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, get_object_or_404
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.decorators import action
+from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.db.models import Case, When
@@ -175,7 +176,7 @@ class HirePostStaffViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self): # 신규 상위 5개 올리기
         qs = super().get_queryset()
-        a = qs.exclude(image='')[:5]
+        a = qs.filter(image='')[:5]
         a_list = list(a)
         b = qs.exclude(pk__in=a_list)
         c = list(chain(a, b))
@@ -255,3 +256,13 @@ class Home_banner(APIView):
         a = FilmSerializer(qs, many=True,fields=('title', 'id'))
         b = FreeBoardSerializer(qs2, many=True,fields=('title', 'id'))
         return Response(a.data+b.data)
+
+class HirePostStaff_imgfilter(ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = HirePostStaffSerializer
+    queryset = HirePostStaff.objects.all()
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.exclude(image='')[:15]
+        return qs

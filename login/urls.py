@@ -5,7 +5,6 @@ from rest_auth.registration.views import RegisterView
 from .views import KakaoToDjangoLogin, ChangePasswordView
 
 from film import views
-from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 
 # urlpatterns = [
 #     path(r'api-jwt-auth/', obtain_jwt_token),          # JWT 토큰 획득
