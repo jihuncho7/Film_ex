@@ -283,7 +283,11 @@ class CommentFreeBoardViewset(viewsets.ModelViewSet):
         author = self.request.user
         serializer.save(author=author)
 
-    def get_queryset(self):
-        qs = super().get_queryset()
-        qs = qs.filter(author=self.request.user.pk)
-        return qs
+class CommentInCommmentFreeBoardViewset(viewsets.ModelViewSet):
+    queryset = CommentFreeBoard.objects.all()
+    serializer_class = CommentFreeBoardSerializer
+    permission_classes = [AllowAny]  # FIXME 인증 구현해야함
+
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)
