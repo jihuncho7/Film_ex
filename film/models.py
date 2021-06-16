@@ -131,16 +131,19 @@ class TagFreeBoard(models.Model):
 class CommentFreeBoard(BaseModel):
 
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    post = models.ForeignKey(FreeBoard, on_delete=models.CASCADE)
+    post = models.ForeignKey(FreeBoard, on_delete=models.CASCADE, related_name='CommentFreeBoard')
     message = models.TextField()
 
     class Meta:
         ordering = ['-created_at']
 
+    def __str__(self):
+        return '%d: %s' % (self.pk, self.message)
+
 class CommentInCommentFreeBoard(BaseModel):
 
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    post = models.ForeignKey(CommentFreeBoard, on_delete=models.CASCADE)
+    post = models.ForeignKey(CommentFreeBoard, on_delete=models.CASCADE, related_name='CommentInCommentFreeBoard')
     message = models.TextField()
 
     class Meta:

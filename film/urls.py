@@ -22,6 +22,9 @@ router.register('resumestaff',ResumeStaffViewSet)
 router.register('resumeactor',ResumeActorViewSet)
 # QnA
 router.register('qna',QnAViewSet)
+# Comments
+CommentFreeBoardViewset
+router.register('commentfreeboard',CommentFreeBoardViewset)
 urlpatterns = [
     path(r'',include(router.urls)),
     path('homebanner/', Home_banner.as_view(), name='homebanner'),

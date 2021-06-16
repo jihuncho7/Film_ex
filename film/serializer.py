@@ -6,6 +6,29 @@ from rest_framework import serializers
 
 read_only_fields_global = (['author'])
 
+"""
+
+코멘트 시리얼라이저
+
+"""
+class CommentInCommentFreeBoardSerializer(serializers.ModelSerializer):
+    author_username = serializers.ReadOnlyField(source='author.username')
+
+    class Meta:
+        model = CommentInCommentFreeBoard
+        fields = '__all__'
+        read_only_fields = read_only_fields_global
+
+class CommentFreeBoardSerializer(serializers.ModelSerializer):
+    author_username = serializers.ReadOnlyField(source='author.username')
+    CommentInCommentFreeBoard = CommentInCommentFreeBoardSerializer(many=True,read_only=True)
+    class Meta:
+        model = CommentFreeBoard
+        fields = '__all__'
+        read_only_fields = read_only_fields_global
+
+
+
 class FilmSerializer(serializers.ModelSerializer):
 
     rate_show = serializers.SerializerMethodField()
@@ -50,6 +73,7 @@ class FreeBoardSerializer(serializers.ModelSerializer, object):
     tag_set = serializers.SerializerMethodField()
     author_username = serializers.ReadOnlyField(source='author.username')
     is_like_user = serializers.SerializerMethodField()
+    CommentFreeBoard = CommentFreeBoardSerializer(many=True,read_only=True)
 
     def get_get_likes(self, obj):
         return obj.get_likes()
@@ -67,7 +91,7 @@ class FreeBoardSerializer(serializers.ModelSerializer, object):
         model = FreeBoard
         fields = ('id','hit','author_username','get_likes','created_at',
                   'updated_at','title','context','image','category',
-                  'tag_set','is_like_user','like_user_set'
+                  'tag_set','is_like_user','like_user_set','CommentFreeBoard',
                   )
         read_only_fields = read_only_fields_global
 
@@ -147,3 +171,4 @@ class QnASerializer(serializers.ModelSerializer):
         model = QnA
         fields = '__all__'
         read_only_fields = read_only_fields_global
+

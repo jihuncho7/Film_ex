@@ -223,7 +223,7 @@ class ResumeActorViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        qs.filter(author=self.request.user.pk)
+        qs = qs.filter(author=self.request.user.pk)
         return qs
 
     def perform_create(self, serializer):
@@ -262,7 +262,28 @@ class HirePostStaff_imgfilter(ListAPIView):
     serializer_class = HirePostStaffSerializer
     queryset = HirePostStaff.objects.all()
 
+    def get_queryset(self): # 인기순 15개 이미지 존재하는 포스트 필터
+        qs = super().get_queryset()
+        qs = qs.exclude(image='')
+        qs = qs.order_by('-like_user_set')[:15]
+        return qs
+
+"""
+
+코멘트 뷰
+
+"""
+
+class CommentFreeBoardViewset(viewsets.ModelViewSet):
+    queryset = CommentFreeBoard.objects.all()
+    serializer_class = CommentFreeBoardSerializer
+    permission_classes = [AllowAny]  # FIXME 인증 구현해야함
+
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)
+
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.exclude(image='')[:15]
+        qs = qs.filter(author=self.request.user.pk)
         return qs
