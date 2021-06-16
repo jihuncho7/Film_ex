@@ -23,8 +23,14 @@ router.register('resumeactor',ResumeActorViewSet)
 # QnA
 router.register('qna',QnAViewSet)
 # Comments
-router.register('commentfreeboard',CommentFreeBoardViewset)
-router.register('commentincommmentfreeboard',CommentInCommmentFreeBoardViewset)
+router.register('comment/film',CommentViewset)
+router.register('comment/film/in',CommentInCommmentViewset)
+router.register('comment/freeboard',CommentFreeBoardViewset)
+router.register('comment/freeboard/in',CommentInCommmentFreeBoardViewset)
+router.register('comment/hirepoststaff',CommentHirePostStaffViewset)
+router.register('comment/hirepoststaff/in',CommentInCommentHirePostStaffViewset)
+router.register('comment/hirepostactor',CommentHirePostActorViewset)
+router.register('comment/hirepostactor/in',CommentInCommentHirePostActorViewset)
 urlpatterns = [
     path(r'',include(router.urls)),
     path('homebanner/', Home_banner.as_view(), name='homebanner'),

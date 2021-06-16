@@ -274,6 +274,24 @@ class HirePostStaff_imgfilter(ListAPIView):
 
 """
 
+class CommentViewset(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [AllowAny]  # FIXME 인증 구현해야함
+
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)
+
+class CommentInCommmentViewset(viewsets.ModelViewSet):
+    queryset = CommentInComment.objects.all()
+    serializer_class = CommentInCommentSerializer
+    permission_classes = [AllowAny]  # FIXME 인증 구현해야함
+
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)
+
 class CommentFreeBoardViewset(viewsets.ModelViewSet):
     queryset = CommentFreeBoard.objects.all()
     serializer_class = CommentFreeBoardSerializer
@@ -285,7 +303,43 @@ class CommentFreeBoardViewset(viewsets.ModelViewSet):
 
 class CommentInCommmentFreeBoardViewset(viewsets.ModelViewSet):
     queryset = CommentFreeBoard.objects.all()
-    serializer_class = CommentFreeBoardSerializer
+    serializer_class = CommentInCommentFreeBoardSerializer
+    permission_classes = [AllowAny]  # FIXME 인증 구현해야함
+
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)
+
+class CommentHirePostStaffViewset(viewsets.ModelViewSet):
+    queryset = CommentHirePostStaff.objects.all()
+    serializer_class = CommentHirePostStaffSerializer
+    permission_classes = [AllowAny]  # FIXME 인증 구현해야함
+
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)
+
+class CommentInCommentHirePostStaffViewset(viewsets.ModelViewSet):
+    queryset = CommentInCommentHirePostStaff.objects.all()
+    serializer_class = CommentInCommentHirePostStaffSerializer
+    permission_classes = [AllowAny]  # FIXME 인증 구현해야함
+
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)
+
+class CommentHirePostActorViewset(viewsets.ModelViewSet):
+    queryset = CommentHirePostActor.objects.all()
+    serializer_class = CommentHirePostActorSerializer
+    permission_classes = [AllowAny]  # FIXME 인증 구현해야함
+
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)
+
+class CommentInCommentHirePostActorViewset(viewsets.ModelViewSet):
+    queryset = CommentInCommentHirePostActor.objects.all()
+    serializer_class = CommentInCommentHirePostActorSerializer
     permission_classes = [AllowAny]  # FIXME 인증 구현해야함
 
     def perform_create(self, serializer):

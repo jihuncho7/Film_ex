@@ -85,7 +85,7 @@ class Comment(BaseModel):
 
     rate = models.IntegerField(default=1, choices=((i,i) for i in range(1,6)))
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    post = models.ForeignKey(Film, on_delete=models.CASCADE)
+    post = models.ForeignKey(Film, on_delete=models.CASCADE,related_name='Comment')
     message = models.TextField()
 
     class Meta:
@@ -94,7 +94,7 @@ class Comment(BaseModel):
 class CommentInComment(BaseModel):
 
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    post = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    post = models.ForeignKey(Comment, on_delete=models.CASCADE,related_name='CommentInComment')
     message = models.TextField()
 
     class Meta:
@@ -199,7 +199,7 @@ class TagPostStaff(models.Model):
 class CommentHirePostStaff(BaseModel):
 
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    post = models.ForeignKey(HirePostStaff, on_delete=models.CASCADE)
+    post = models.ForeignKey(HirePostStaff, on_delete=models.CASCADE,related_name='CommentHirePostStaff')
     message = models.TextField()
 
     class Meta:
@@ -208,7 +208,7 @@ class CommentHirePostStaff(BaseModel):
 class CommentInCommentHirePostStaff(BaseModel):
 
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    post = models.ForeignKey(CommentHirePostStaff, on_delete=models.CASCADE)
+    post = models.ForeignKey(CommentHirePostStaff, on_delete=models.CASCADE,related_name='CommentInCommentHirePostStaff')
     message = models.TextField()
 
     class Meta:
@@ -260,7 +260,7 @@ class TagPostActor(models.Model):
 class CommentHirePostActor(BaseModel):
 
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    post = models.ForeignKey(HirePostActor, on_delete=models.CASCADE)
+    post = models.ForeignKey(HirePostActor, on_delete=models.CASCADE,related_name='CommentHirePostActor')
     message = models.TextField()
 
     class Meta:
@@ -269,7 +269,7 @@ class CommentHirePostActor(BaseModel):
 class CommentInCommentHirePostActor(BaseModel):
 
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    post = models.ForeignKey(CommentHirePostActor, on_delete=models.CASCADE)
+    post = models.ForeignKey(CommentHirePostActor, on_delete=models.CASCADE,related_name='CommentInCommentHirePostActor')
     message = models.TextField()
 
     class Meta:

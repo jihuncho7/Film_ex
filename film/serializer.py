@@ -2,30 +2,9 @@
 
 from .models import *
 from rest_framework import serializers
-
+from .serializer_comments import *
 
 read_only_fields_global = (['author'])
-
-"""
-
-코멘트 시리얼라이저
-
-"""
-class CommentInCommentFreeBoardSerializer(serializers.ModelSerializer):
-    author_username = serializers.ReadOnlyField(source='author.username')
-
-    class Meta:
-        model = CommentInCommentFreeBoard
-        fields = '__all__'
-        read_only_fields = read_only_fields_global
-
-class CommentFreeBoardSerializer(serializers.ModelSerializer):
-    author_username = serializers.ReadOnlyField(source='author.username')
-    CommentInCommentFreeBoard = CommentInCommentFreeBoardSerializer(many=True,read_only=True)
-    class Meta:
-        model = CommentFreeBoard
-        fields = '__all__'
-        read_only_fields = read_only_fields_global
 
 
 
@@ -57,14 +36,6 @@ class FilmSerializer(serializers.ModelSerializer):
             for field_name in existing - allowed:
                 self.fields.pop(field_name)
 
-
-class CommentSerializer(serializers.ModelSerializer):
-    author_username = serializers.ReadOnlyField(source='author.username')
-
-    class Meta:
-        model = Comment
-        fields = '__all__'
-        read_only_fields = ('author','post')
 
 class FreeBoardSerializer(serializers.ModelSerializer, object):
     # user = serializers.ReadOnlyField(source='user.nickname')
