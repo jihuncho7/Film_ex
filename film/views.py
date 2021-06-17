@@ -112,7 +112,6 @@ class FreeBoardViewSet(viewsets.ModelViewSet):
     pagination_class = StandardResultsSetPagination
     filter_backends = [filters.SearchFilter, filters.OrderingFilter,]
     search_fields = ['title', 'category', 'context']
-    ordering_fields = ['num_like']
     # ordering = ['-num_like', '-created_at']
 
     def perform_create(self, serializer):
@@ -150,12 +149,12 @@ class FreeBoardViewSet(viewsets.ModelViewSet):
     #     serializer.save(author=self.request.user)
     #     return super().perform_create(serializer)
 
-    def get_queryset(self):  # 추천 상위 5개 올리기
+    def get_queryset(self):  # 추천 상위 5개 올리기 TODO 추천 기준 2개에서 5개로 올리기
         qs = super().get_queryset()
         qs = qs.annotate(num_like=Count('like_user_set'))
         a = qs.filter(num_like__gte=2).order_by('-num_like')[:5]
         a_list = list(a)
-        b = qs.filter(num_like__lt=2).exclude(pk__in=a_list)
+        b = qs.filter(num_like__lt=2).order_by('-created_at').exclude(pk__in=a_list)
         c = list(chain(a, b))
         preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(c)])
         qs = qs.filter(pk__in=c).order_by(preserved)
@@ -267,6 +266,18 @@ class HirePostStaff_imgfilter(ListAPIView):
         qs = qs.exclude(image='')
         qs = qs.order_by('-like_user_set')[:15]
         return qs
+
+
+class MypageApplied(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+
+        qs = HirePostStaff.objects.filter(is_applied_set=self.request.user.pk)
+        qs2 = HirePostActor.objects.filter(is_applied_set=self.request.user.pk)
+        a = HirePostStaffSerializer(qs, context={'req': 'req'},many=True)
+        b = HirePostActorSerializer(qs2, many=True)
+        return Response(a.data+b.data)
 
 """
 

@@ -2,18 +2,29 @@ from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from rest_auth.registration.views import SocialLoginView
 
 from allauth.socialaccount.providers.kakao import views as kakao_views
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.generics import UpdateAPIView
 from rest_framework.response import Response
-from django.contrib.auth.models import User
-from .serializer import ChangePasswordSerializer
-from rest_framework.permissions import IsAuthenticated
+
+from .models import User
+from .serializer import ChangePasswordSerializer, UserSerializer
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 class KakaoToDjangoLogin(SocialLoginView):
     adapter_class = kakao_views.KakaoOAuth2Adapter
     client_class = OAuth2Client
     callback_url = 'localhost:8080'
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]  # FIXME 인증 구현해야함
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(id=self.request.user.pk)
+        return qs
 
 
 class ChangePasswordView(UpdateAPIView):

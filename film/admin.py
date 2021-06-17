@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Film, Genre, Comment, FreeBoard, ResumeStaff, CommentFreeBoard, CommentInCommentFreeBoard
+from .models import Film, Genre, Comment, FreeBoard, ResumeStaff, CommentFreeBoard, CommentInCommentFreeBoard, \
+    HirePostStaff
 
 
 # Register your models here.
@@ -26,4 +27,7 @@ class CommentFreeBoardAdmin(admin.ModelAdmin):
 
 @admin.register(CommentInCommentFreeBoard)
 class CommentInCommentFreeBoardAdmin(admin.ModelAdmin):
+    pass
+@admin.register(HirePostStaff)
+class HirePostStaffAdmin(admin.ModelAdmin):
     pass

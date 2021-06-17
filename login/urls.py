@@ -2,17 +2,16 @@
 from django.urls import path, include
 from rest_auth.views import LoginView, LogoutView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
 from rest_auth.registration.views import RegisterView
-from .views import KakaoToDjangoLogin, ChangePasswordView
+from rest_framework.routers import DefaultRouter
 
-from film import views
+from .views import KakaoToDjangoLogin, ChangePasswordView, ProfileViewSet
 
-# urlpatterns = [
-#     path(r'api-jwt-auth/', obtain_jwt_token),          # JWT 토큰 획득
-#     path(r'api-jwt-auth/refresh/', refresh_jwt_token), # JWT 토큰 갱신
-#     path(r'api-jwt-auth/verify/', verify_jwt_token),   # JWT 토큰 확인
-# ]
+app_name = 'login'
 
+router = DefaultRouter()
+router.register('profile',ProfileViewSet)
 urlpatterns = [
+    path(r'',include(router.urls)),
     path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
     # path('rest-auth/kakao/', include('rest_auth.registration.urls')),

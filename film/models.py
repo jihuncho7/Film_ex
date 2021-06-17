@@ -109,6 +109,7 @@ class FreeBoard(BaseModelExtend):
     context = models.TextField()
     image = models.ImageField(upload_to="freeboard/%Y/%m/%d",blank=True)
     tag_set = models.ManyToManyField('TagFreeBoard',blank=True)
+
     def extract_tag_list(self):
         tag_name_list = re.findall(r"#([a-zA-Z\dㄱ-힣]+)",self.context)
         tag_list = []
@@ -176,6 +177,12 @@ class HirePostStaff(BaseModelExtend):
     category = models.CharField(max_length=10, choices=Choices)
 
     tag_set = models.ManyToManyField('TagPostStaff', blank=True)
+    # 지원현황
+    is_applied_set = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,
+                                           related_name='staff_is_applied_set')
+
+    def is_applied_user(self, user):
+        return self.is_applied_set.filter(pk=user.pk).exists()
 
     def extract_tag_list(self):
         tag_name_list = re.findall(r"#([a-zA-Z\dㄱ-힣]+)", self.context)
@@ -238,6 +245,13 @@ class HirePostActor(BaseModelExtend):
     manager = models.CharField(max_length=10)
     tag_set = models.ManyToManyField('TagPostActor', blank=True)
 
+    # 지원현황
+    is_applied_set = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,
+                                           related_name='actor_is_applied_set')
+
+    def is_applied_user(self, user):
+        return self.is_applied_set.filter(pk=user.pk).exists()
+
     def __str__(self):
         return self.title
 
@@ -294,7 +308,7 @@ class ResumeStaff(BaseModelExtend):
     category = models.CharField(max_length=10, choices=Choices)
     resume_url = models.URLField(blank=True)
     tag_set = models.ManyToManyField('TagResumeStaff', blank=True)
-
+    is_publish = models.BooleanField(default=False)
     def extract_tag_list(self):
         tag_name_list = re.findall(r"#([a-zA-Z\dㄱ-힣]+)", self.context)
         tag_list = []
@@ -335,7 +349,7 @@ class ResumeActor(BaseModelExtend):## 액터스용
     tel = models.CharField(max_length=50, blank=True)
     email = models.EmailField(blank=True)
     tag_set = models.ManyToManyField('TagResumeActor', blank=True)
-
+    is_publish = models.BooleanField(default=False)
     def extract_tag_list(self):
         tag_name_list = re.findall(r"#([a-zA-Z\dㄱ-힣]+)", self.context)
         tag_list = []

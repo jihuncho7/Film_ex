@@ -35,6 +35,7 @@ urlpatterns = [
     path(r'',include(router.urls)),
     path('homebanner/', Home_banner.as_view(), name='homebanner'),
     path('HirePostStaff_imgfilter/', HirePostStaff_imgfilter.as_view(), name='HirePostStaff_imgfilter'),
+    path('MypageApplied', MypageApplied.as_view(), name='MypageApplied'),
 
     #path('review/', views.review, name='review'),
 ]

@@ -95,9 +95,24 @@ class HirePostStaffSerializer(serializers.ModelSerializer):
                   'updated_at', 'title', 'context', 'image', 'category',
                   'tag_set', 'like_user_set', 'payment', 'requirement', 'advantage',
                   'job_loca', 'company', 'company_loca', 'company_desc', 'deadline',
-                  'company_url', 'job_position'
+                  'company_url', 'job_position',
                   )
         read_only_fields = read_only_fields_global
+
+    # views.py 에서 필드 수정 할 수 있게 하는 커스텀 쿼리
+    def __init__(self, *args, **kwargs):
+        # Don't pass the 'fields' arg up to the superclass
+        fields = kwargs.pop('fields', None)
+
+        # Instantiate the superclass normally
+        super(HirePostStaffSerializer, self).__init__(*args, **kwargs)
+
+        if fields is not None:
+            # Drop any fields that are not specified in the `fields` argument.
+            allowed = set(fields)
+            existing = set(self.fields)
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
 
 
 class HirePostActorSerializer(serializers.ModelSerializer):
@@ -113,9 +128,24 @@ class HirePostActorSerializer(serializers.ModelSerializer):
                   'updated_at', 'title', 'context', 'image', 'category',
                   'tag_set', 'like_user_set', 'payment', 'requirement', 'advantage',
                   'job_loca', 'company', 'company_loca', 'company_desc', 'deadline',
-                  'company_url', 'job_position'
+                  'company_url', 'job_position',
                   )
         read_only_fields = read_only_fields_global
+
+    # views.py 에서 필드 수정 할 수 있게 하는 커스텀 쿼리
+    def __init__(self, *args, **kwargs):
+        # Don't pass the 'fields' arg up to the superclass
+        fields = kwargs.pop('fields', None)
+
+        # Instantiate the superclass normally
+        super(HirePostActorSerializer, self).__init__(*args, **kwargs)
+
+        if fields is not None:
+            # Drop any fields that are not specified in the `fields` argument.
+            allowed = set(fields)
+            existing = set(self.fields)
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
 
 
 class ResumeStaffSerializer(serializers.ModelSerializer):
