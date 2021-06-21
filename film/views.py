@@ -279,6 +279,63 @@ class MypageApplied(APIView):
         b = HirePostActorSerializer(qs2, many=True)
         return Response(a.data+b.data)
 
+
+class WrittenByMe(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+
+        qs = Film.objects.filter(author=self.request.user.pk)
+        qs2 = FreeBoard.objects.filter(author=self.request.user.pk)
+        qs3 = HirePostStaff.objects.filter(author=self.request.user.pk)
+        qs4 = HirePostActor.objects.filter(author=self.request.user.pk)
+        s1 = FilmSerializer(qs,many=True,fields=('id','hit','title','created_at','postfrom'))
+        s2 = FreeBoardSerializer(qs2, many=True,fields=('id','hit','title','created_at','postfrom'))
+        s3 = HirePostStaffSerializer(qs3, many=True,fields=('id','hit','title','created_at','postfrom'))
+        s4 = HirePostActorSerializer(qs4, many=True,fields=('id','hit','title','created_at','postfrom'))
+        return Response(s1.data+s2.data+s3.data+s4.data)
+
+class CountLikedPost(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        q_like = HirePostStaff.objects.filter(like_user_set=self.request.user.pk).count()
+        q_like2 = HirePostActor.objects.filter(like_user_set=self.request.user.pk).count()
+        q_applied = HirePostStaff.objects.filter(is_applied_set=self.request.user.pk).count()
+        q_applied2 = HirePostActor.objects.filter(is_applied_set=self.request.user.pk).count()
+        q_resume = ResumeStaff.objects.filter(author=self.request.user.pk)
+        q_resume2 = ResumeActor.objects.filter(author=self.request.user.pk)
+        arr = 0
+        for i in q_resume:
+            arr+i.hit
+        for i in q_resume2:
+            arr+i.hit
+        return Response({"likes": q_like + q_like2,
+                         "applied":q_applied+q_applied2,
+                         "resumes_hit":arr,
+                         })
+
+class CountAllPost(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        q = Film.objects.filter(author=self.request.user.pk).count()
+        q1 = FreeBoard.objects.filter(author=self.request.user.pk).count()
+        q2 = HirePostStaff.objects.filter(author=self.request.user.pk).count()
+        q3 = HirePostActor.objects.filter(author=self.request.user.pk).count()
+        q4 = ResumeStaff.objects.filter(author=self.request.user.pk).count()
+        q5 = ResumeActor.objects.filter(author=self.request.user.pk).count()
+        counts = q+q1+q2+q3+q4+q5
+        c1 = Comment.objects.filter(author=self.request.user.pk).count()
+        c2 = CommentFreeBoard.objects.filter(author=self.request.user.pk).count()
+        c3 = CommentHirePostStaff.objects.filter(author=self.request.user.pk).count()
+        c4 = CommentHirePostActor.objects.filter(author=self.request.user.pk).count()
+        comments = c1+c2+c3+c4
+        return Response({"posts": counts,
+                         "comments": comments,
+                         })
+
+
 """
 
 코멘트 뷰

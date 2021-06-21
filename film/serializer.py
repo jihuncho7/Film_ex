@@ -45,7 +45,9 @@ class FreeBoardSerializer(serializers.ModelSerializer, object):
     author_username = serializers.ReadOnlyField(source='author.username')
     is_like_user = serializers.SerializerMethodField()
     CommentFreeBoard = CommentFreeBoardSerializer(many=True,read_only=True)
-
+    postfrom = serializers.SerializerMethodField()
+    def get_postfrom(self,obj):
+        return '자유게시판'
     def get_get_likes(self, obj):
         return obj.get_likes()
 
@@ -62,7 +64,7 @@ class FreeBoardSerializer(serializers.ModelSerializer, object):
         model = FreeBoard
         fields = ('id','hit','author_username','get_likes','created_at',
                   'updated_at','title','context','image','category',
-                  'tag_set','is_like_user','like_user_set','CommentFreeBoard',
+                  'tag_set','is_like_user','like_user_set','CommentFreeBoard','postfrom',
                   )
         read_only_fields = read_only_fields_global
 
@@ -85,6 +87,10 @@ class FreeBoardSerializer(serializers.ModelSerializer, object):
 class HirePostStaffSerializer(serializers.ModelSerializer):
     author_username = serializers.ReadOnlyField(source='author.username')
     tag_set = serializers.SerializerMethodField()
+    postfrom = serializers.SerializerMethodField()
+
+    def get_postfrom(self, obj):
+        return '스탭 구인'
 
     def get_tag_set(self, obj):
         return obj.extract_tag_list()
@@ -95,7 +101,7 @@ class HirePostStaffSerializer(serializers.ModelSerializer):
                   'updated_at', 'title', 'context', 'image', 'category',
                   'tag_set', 'like_user_set', 'payment', 'requirement', 'advantage',
                   'job_loca', 'company', 'company_loca', 'company_desc', 'deadline',
-                  'company_url', 'job_position',
+                  'company_url', 'job_position','postfrom',
                   )
         read_only_fields = read_only_fields_global
 
@@ -118,6 +124,10 @@ class HirePostStaffSerializer(serializers.ModelSerializer):
 class HirePostActorSerializer(serializers.ModelSerializer):
     author_username = serializers.ReadOnlyField(source='author.username')
     tag_set = serializers.SerializerMethodField()
+    postfrom = serializers.SerializerMethodField()
+
+    def get_postfrom(self, obj):
+        return '액터 구인'
 
     def get_tag_set(self, obj):
         return obj.extract_tag_list()
@@ -128,7 +138,7 @@ class HirePostActorSerializer(serializers.ModelSerializer):
                   'updated_at', 'title', 'context', 'image', 'category',
                   'tag_set', 'like_user_set', 'payment', 'requirement', 'advantage',
                   'job_loca', 'company', 'company_loca', 'company_desc', 'deadline',
-                  'company_url', 'job_position',
+                  'company_url', 'job_position','postfrom',
                   )
         read_only_fields = read_only_fields_global
 
@@ -150,6 +160,10 @@ class HirePostActorSerializer(serializers.ModelSerializer):
 
 class ResumeStaffSerializer(serializers.ModelSerializer):
     author_username = serializers.ReadOnlyField(source='author.username')
+    postfrom = serializers.SerializerMethodField()
+
+    def get_postfrom(self, obj):
+        return '스탭 이력서'
 
     class Meta:
         model = ResumeStaff
@@ -158,6 +172,10 @@ class ResumeStaffSerializer(serializers.ModelSerializer):
 
 class ResumeActorSerializer(serializers.ModelSerializer):
     author_username = serializers.ReadOnlyField(source='author.username')
+    postfrom = serializers.SerializerMethodField()
+
+    def get_postfrom(self, obj):
+        return '액터 이력서'
 
     class Meta:
         model = ResumeActor
