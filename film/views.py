@@ -1,6 +1,8 @@
+import django_filters
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView
@@ -16,7 +18,6 @@ from rest_framework import viewsets, status
 from itertools import chain # 쿼리셋 append 용
 from rest_framework import filters
 from django.db.models import Count
-
 
 ### Film Review
 
@@ -104,14 +105,13 @@ class FilmOnStreamingViewSet(viewsets.ModelViewSet):
 ### FreeBoard
 
 class FreeBoardViewSet(viewsets.ModelViewSet):
-    # authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
     queryset = FreeBoard.objects.all()
     serializer_class = FreeBoardSerializer
-    # permission_classes = [IsAuthenticated]  # FIXME 인증 구현해야함
     permission_classes = [AllowAny]  # FIXME 인증 구현해야함
     pagination_class = StandardResultsSetPagination
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter,]
-    search_fields = ['title', 'category', 'context']
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter,filters.SearchFilter]
+    filterset_fields = [ 'category' ]
+    search_fields = ['title','context']
     # ordering = ['-num_like', '-created_at']
 
     def perform_create(self, serializer):

@@ -40,7 +40,7 @@ class FilmSerializer(serializers.ModelSerializer):
 class FreeBoardSerializer(serializers.ModelSerializer, object):
     # user = serializers.ReadOnlyField(source='user.nickname')
     get_likes = serializers.SerializerMethodField()
-    category = serializers.SerializerMethodField()
+
     tag_set = serializers.SerializerMethodField()
     author_username = serializers.ReadOnlyField(source='author.username')
     is_like_user = serializers.SerializerMethodField()
@@ -51,8 +51,6 @@ class FreeBoardSerializer(serializers.ModelSerializer, object):
     def get_get_likes(self, obj):
         return obj.get_likes()
 
-    def get_category(self, obj):
-        return obj.get_category_display()
 
     def get_tag_set(self, obj):
         return obj.extract_tag_list()
