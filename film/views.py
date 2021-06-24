@@ -166,8 +166,9 @@ class HirePostStaffViewSet(viewsets.ModelViewSet):
     serializer_class = HirePostStaffSerializer
     permission_classes = [AllowAny]  # FIXME 인증 구현해야함
     pagination_class = StandardResultsSetPagination
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, ]
-    search_fields = ['title', 'author_username', 'context']
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_fields = ['category']
+    search_fields = ['title', 'context']
 
     def perform_create(self, serializer):
         author = self.request.user
@@ -188,8 +189,9 @@ class HirePostActorViewSet(viewsets.ModelViewSet):
     serializer_class = HirePostActorSerializer
     permission_classes = [AllowAny]  # FIXME 인증 구현해야함
     pagination_class = StandardResultsSetPagination
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, ]
-    search_fields = ['title', 'author_username', 'context']
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_fields = ['category']
+    search_fields = ['title', 'context']
 
     def perform_create(self, serializer):
         author = self.request.user

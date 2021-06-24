@@ -173,8 +173,8 @@ class HirePostStaff(BaseModelExtend):
     payment = models.IntegerField()
 
     # 카테고리 시급,주급,일급,월급 초이스
-    Choices = ('시급', '시급'), ('일급', '일급'), ('주급', '주급'), ('월급', '월급')
-    category = models.CharField(max_length=10, choices=Choices)
+    # Choices = ('시급', '시급'), ('일급', '일급'), ('주급', '주급'), ('월급', '월급')
+    # wage_choice = models.CharField(max_length=10, choices=Choices)
 
     tag_set = models.ManyToManyField('TagPostStaff', blank=True)
     # 지원현황
