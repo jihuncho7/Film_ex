@@ -20,6 +20,8 @@ router.register('hirepostactor',HirePostActorViewSet)
 # Resume
 router.register('resumestaff',ResumeStaffViewSet)
 router.register('resumeactor',ResumeActorViewSet)
+router.register('resumestaffboard',ResumeStaffBoard)
+router.register('resumeactorboard',ResumeActorBoard)
 # QnA
 router.register('qna',QnAViewSet)
 # Comments

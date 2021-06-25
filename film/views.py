@@ -247,6 +247,33 @@ class QnAViewSet(viewsets.ModelViewSet):
 기능적인 뷰들
 
 """
+class ResumeStaffBoard(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = ResumeStaffSerializer
+    queryset = ResumeStaff.objects.all()
+
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)
+
+    def get_queryset(self): # 인기순 15개 이미지 존재하는 포스트 필터
+        qs = super().get_queryset()
+        qs = qs.filter(is_publish=True)
+        return qs
+
+class ResumeActorBoard(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = ResumeActorSerializer
+    queryset = ResumeActor.objects.all()
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)
+
+    def get_queryset(self): # 인기순 15개 이미지 존재하는 포스트 필터
+        qs = super().get_queryset()
+        qs = qs.filter(is_publish=True)
+        return qs
+
 class Home_banner(APIView):
     permission_classes = [AllowAny]
 
