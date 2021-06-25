@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.kakao',
+    'allauth.socialaccount.providers.naver',
     'rest_framework.authtoken',
     'rest_auth',
     # locals apps
@@ -230,6 +231,22 @@ SOCIALACCOUNT_PROVIDERS = {
             'client_id': '3d961dbb12a532f3120d8a5a7f0db730',
             'secret': '586673',
             'key': ''
+        }
+    },
+    'google':{
+        'APP':{
+            'client_id': '919070184360-3v52kcpgd92ga1mq1qb417ctiqabko6v.apps.googleusercontent.com',
+            'secret': 'AIzaSyDobG99B7WfrjQ0SdEi5rTO-RKSbT0Bmww',
+            'key':''
+
+        }
+    },
+    'naver': {
+        'APP': {
+            'client_id': 'Fr0D7K07ckqEJ77ZBbFT',
+            'secret': 'QUMCAJm3XK',
+            'key': ''
+
         }
     }
 }

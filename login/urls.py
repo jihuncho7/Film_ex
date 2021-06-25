@@ -2,7 +2,7 @@
 from django.urls import path, include
 from rest_auth.views import LoginView, LogoutView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
 from rest_auth.registration.views import RegisterView
-from .views import KakaoToDjangoLogin, ChangePasswordView
+from .views import KakaoToDjangoLogin, GoogleToDjangoLogin, NaverToDjangoLogin
 
 from film import views
 
@@ -20,6 +20,7 @@ urlpatterns = [
     # 회원가입
     # path('rest-auth/registration', RegisterView.as_view(), name='rest_register'),
     path('kakao/todjango/', KakaoToDjangoLogin.as_view(), name='kakao_todjango_login'),
-    path('ChangePassword/', ChangePasswordView.as_view(), name='ChangePassword'),
+    path('google/todjango/', GoogleToDjangoLogin.as_view(), name='google_todjango-login'),
+    path('naver/todjango/', NaverToDjangoLogin.as_view(), name='naver_todjango-login'),
 
 ]
