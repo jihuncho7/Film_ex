@@ -2,6 +2,8 @@
 from django.urls import path, include
 from rest_auth.views import LoginView, LogoutView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
 from rest_auth.registration.views import RegisterView
+from rest_framework.routers import DefaultRouter
+
 from .views import KakaoToDjangoLogin, GoogleToDjangoLogin, NaverToDjangoLogin
 
 from .views import KakaoToDjangoLogin, ProfileViewSet
