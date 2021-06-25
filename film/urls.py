@@ -20,6 +20,8 @@ router.register('hirepostactor',HirePostActorViewSet)
 # Resume
 router.register('resumestaff',ResumeStaffViewSet)
 router.register('resumeactor',ResumeActorViewSet)
+router.register('resumestaffboard',ResumeStaffBoard)
+router.register('resumeactorboard',ResumeActorBoard)
 # QnA
 router.register('qna',QnAViewSet)
 # Comments
@@ -35,6 +37,10 @@ urlpatterns = [
     path(r'',include(router.urls)),
     path('homebanner/', Home_banner.as_view(), name='homebanner'),
     path('HirePostStaff_imgfilter/', HirePostStaff_imgfilter.as_view(), name='HirePostStaff_imgfilter'),
+    path('MypageApplied', MypageApplied.as_view(), name='MypageApplied'),
+    path('WrittenByMe', WrittenByMe.as_view(), name='WrittenByMe'),
+    path('CountLikedPost', CountLikedPost.as_view(), name='CountLikedPost'),
+    path('CountAllPost', CountAllPost.as_view(), name='CountAllPost'),
 
     #path('review/', views.review, name='review'),
 ]

@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser
+from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractUser, PermissionsMixin
 from django.utils import timezone
@@ -8,6 +9,10 @@ from .managers import *
 
 class User(AbstractBaseUser,PermissionsMixin):
     objects = CustomUserManager()
+    image = models.ImageField(upload_to="login/%Y/%m/%d", blank=True)
+    phone_regex = RegexValidator(regex=r'\d{9,15}$',
+                                 message="Phone number must be entered in the format: '999999999'. Up to 15 digits allowed.")
+    phone = models.CharField(validators=[phone_regex], max_length=17, blank=True)
     email = models.EmailField(
         max_length=255,
         unique=True,

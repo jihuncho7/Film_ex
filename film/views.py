@@ -1,6 +1,8 @@
+import django_filters
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView
@@ -16,7 +18,6 @@ from rest_framework import viewsets, status
 from itertools import chain # 쿼리셋 append 용
 from rest_framework import filters
 from django.db.models import Count
-
 
 ### Film Review
 
@@ -104,15 +105,13 @@ class FilmOnStreamingViewSet(viewsets.ModelViewSet):
 ### FreeBoard
 
 class FreeBoardViewSet(viewsets.ModelViewSet):
-    # authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
     queryset = FreeBoard.objects.all()
     serializer_class = FreeBoardSerializer
-    # permission_classes = [IsAuthenticated]  # FIXME 인증 구현해야함
     permission_classes = [AllowAny]  # FIXME 인증 구현해야함
     pagination_class = StandardResultsSetPagination
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter,]
-    search_fields = ['title', 'category', 'context']
-    ordering_fields = ['num_like']
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter,filters.SearchFilter]
+    filterset_fields = [ 'category' ]
+    search_fields = ['title','context']
     # ordering = ['-num_like', '-created_at']
 
     def perform_create(self, serializer):
@@ -150,12 +149,12 @@ class FreeBoardViewSet(viewsets.ModelViewSet):
     #     serializer.save(author=self.request.user)
     #     return super().perform_create(serializer)
 
-    def get_queryset(self):  # 추천 상위 5개 올리기
+    def get_queryset(self):  # 추천 상위 5개 올리기 TODO 추천 기준 2개에서 5개로 올리기
         qs = super().get_queryset()
         qs = qs.annotate(num_like=Count('like_user_set'))
         a = qs.filter(num_like__gte=2).order_by('-num_like')[:5]
         a_list = list(a)
-        b = qs.filter(num_like__lt=2).exclude(pk__in=a_list)
+        b = qs.filter(num_like__lt=2).order_by('-created_at').exclude(pk__in=a_list)
         c = list(chain(a, b))
         preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(c)])
         qs = qs.filter(pk__in=c).order_by(preserved)
@@ -167,8 +166,9 @@ class HirePostStaffViewSet(viewsets.ModelViewSet):
     serializer_class = HirePostStaffSerializer
     permission_classes = [AllowAny]  # FIXME 인증 구현해야함
     pagination_class = StandardResultsSetPagination
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, ]
-    search_fields = ['title', 'author_username', 'context']
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_fields = ['category']
+    search_fields = ['title', 'context']
 
     def perform_create(self, serializer):
         author = self.request.user
@@ -189,8 +189,9 @@ class HirePostActorViewSet(viewsets.ModelViewSet):
     serializer_class = HirePostActorSerializer
     permission_classes = [AllowAny]  # FIXME 인증 구현해야함
     pagination_class = StandardResultsSetPagination
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, ]
-    search_fields = ['title', 'author_username', 'context']
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_fields = ['category']
+    search_fields = ['title', 'context']
 
     def perform_create(self, serializer):
         author = self.request.user
@@ -246,6 +247,33 @@ class QnAViewSet(viewsets.ModelViewSet):
 기능적인 뷰들
 
 """
+class ResumeStaffBoard(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = ResumeStaffSerializer
+    queryset = ResumeStaff.objects.all()
+
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)
+
+    def get_queryset(self): # 인기순 15개 이미지 존재하는 포스트 필터
+        qs = super().get_queryset()
+        qs = qs.filter(is_publish=True)
+        return qs
+
+class ResumeActorBoard(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+    serializer_class = ResumeActorSerializer
+    queryset = ResumeActor.objects.all()
+    def perform_create(self, serializer):
+        author = self.request.user
+        serializer.save(author=author)
+
+    def get_queryset(self): # 인기순 15개 이미지 존재하는 포스트 필터
+        qs = super().get_queryset()
+        qs = qs.filter(is_publish=True)
+        return qs
+
 class Home_banner(APIView):
     permission_classes = [AllowAny]
 
@@ -267,6 +295,75 @@ class HirePostStaff_imgfilter(ListAPIView):
         qs = qs.exclude(image='')
         qs = qs.order_by('-like_user_set')[:15]
         return qs
+
+
+class MypageApplied(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+
+        qs = HirePostStaff.objects.filter(is_applied_set=self.request.user.pk)
+        qs2 = HirePostActor.objects.filter(is_applied_set=self.request.user.pk)
+        a = HirePostStaffSerializer(qs, context={'req': 'req'},many=True)
+        b = HirePostActorSerializer(qs2, many=True)
+        return Response(a.data+b.data)
+
+
+class WrittenByMe(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+
+        qs = Film.objects.filter(author=self.request.user.pk)
+        qs2 = FreeBoard.objects.filter(author=self.request.user.pk)
+        qs3 = HirePostStaff.objects.filter(author=self.request.user.pk)
+        qs4 = HirePostActor.objects.filter(author=self.request.user.pk)
+        s1 = FilmSerializer(qs,many=True,fields=('id','hit','title','created_at','postfrom'))
+        s2 = FreeBoardSerializer(qs2, many=True,fields=('id','hit','title','created_at','postfrom'))
+        s3 = HirePostStaffSerializer(qs3, many=True,fields=('id','hit','title','created_at','postfrom'))
+        s4 = HirePostActorSerializer(qs4, many=True,fields=('id','hit','title','created_at','postfrom'))
+        return Response(s1.data+s2.data+s3.data+s4.data)
+
+class CountLikedPost(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        q_like = HirePostStaff.objects.filter(like_user_set=self.request.user.pk).count()
+        q_like2 = HirePostActor.objects.filter(like_user_set=self.request.user.pk).count()
+        q_applied = HirePostStaff.objects.filter(is_applied_set=self.request.user.pk).count()
+        q_applied2 = HirePostActor.objects.filter(is_applied_set=self.request.user.pk).count()
+        q_resume = ResumeStaff.objects.filter(author=self.request.user.pk)
+        q_resume2 = ResumeActor.objects.filter(author=self.request.user.pk)
+        arr = 0
+        for i in q_resume:
+            arr+i.hit
+        for i in q_resume2:
+            arr+i.hit
+        return Response({"likes": q_like + q_like2,
+                         "applied":q_applied+q_applied2,
+                         "resumes_hit":arr,
+                         })
+
+class CountAllPost(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        q = Film.objects.filter(author=self.request.user.pk).count()
+        q1 = FreeBoard.objects.filter(author=self.request.user.pk).count()
+        q2 = HirePostStaff.objects.filter(author=self.request.user.pk).count()
+        q3 = HirePostActor.objects.filter(author=self.request.user.pk).count()
+        q4 = ResumeStaff.objects.filter(author=self.request.user.pk).count()
+        q5 = ResumeActor.objects.filter(author=self.request.user.pk).count()
+        counts = q+q1+q2+q3+q4+q5
+        c1 = Comment.objects.filter(author=self.request.user.pk).count()
+        c2 = CommentFreeBoard.objects.filter(author=self.request.user.pk).count()
+        c3 = CommentHirePostStaff.objects.filter(author=self.request.user.pk).count()
+        c4 = CommentHirePostActor.objects.filter(author=self.request.user.pk).count()
+        comments = c1+c2+c3+c4
+        return Response({"posts": counts,
+                         "comments": comments,
+                         })
+
 
 """
 
