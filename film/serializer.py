@@ -81,6 +81,19 @@ class FreeBoardSerializer(serializers.ModelSerializer, object):
             for field_name in existing - allowed:
                 self.fields.pop(field_name)
 
+class FreeBoard_SubSerializer(serializers.ModelSerializer, object):
+    postfrom = serializers.SerializerMethodField()
+    author_username = serializers.ReadOnlyField(source='author.username')
+    def get_postfrom(self,obj):
+        return '자유게시판'
+    class Meta:
+        model = FreeBoard
+        fields = ('id','hit','created_at','author_username',
+                  'updated_at','title','context','image','category',
+                  'tag_set','postfrom',
+                  )
+        read_only_fields = read_only_fields_global
+
 
 class HirePostStaffSerializer(serializers.ModelSerializer):
     author_username = serializers.ReadOnlyField(source='author.username')

@@ -3,12 +3,13 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_haystack.viewsets import HaystackViewSet
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from django.db.models import Case, When
+from django.db.models import Case, When, Q
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -364,6 +365,28 @@ class CountAllPost(APIView):
                          "comments": comments,
                          })
 
+# class SearchAll(viewsets.ModelViewSet):
+#     permission_classes = [AllowAny]
+#     filter_backends = [filters.SearchFilter, filters.OrderingFilter, ]
+#     search_fields = ['title']
+#     serializer_class = FreeBoardSerializer
+#
+#     def get(self, request):
+#         q = Film.objects.all()
+#         q1 = FreeBoard.objects.all()
+#         q2 = HirePostStaff.objects.all()
+#         q3 = HirePostActor.objects.all()
+#         s1 = FilmSerializer(q,many=True,fields=('id','hit','title','created_at','postfrom'))
+#         s2 = FreeBoardSerializer(q1, many=True,fields=('id','hit','title','created_at','postfrom'))
+#         s3 = HirePostStaffSerializer(q2, many=True,fields=('id','hit','title','created_at','postfrom'))
+#         s4 = HirePostActorSerializer(q3, many=True,fields=('id','hit','title','created_at','postfrom'))
+#
+#         return Response({"film": s1.data,
+#                          "freeboard": s2.data,
+#                          "hirepoststaff": s3.data,
+#                          "hirepostactor": s4.data,
+#                          })
+
 
 """
 
@@ -442,3 +465,26 @@ class CommentInCommentHirePostActorViewset(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         author = self.request.user
         serializer.save(author=author)
+
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+class SearchAllView(APIView):
+
+    permission_classes = [AllowAny]
+
+    def post(self, request, format=None):
+        query = request.data
+        or_lookup = (Q(context__icontains=query) |
+                     Q(title__icontains=query)
+                     )
+        qs = ResumeStaff.objects.filter(or_lookup)
+        qs2 = FreeBoard.objects.filter(or_lookup)
+        rq = ResumeStaffSerializer(qs,many=True)
+        rq2 = FreeBoard_SubSerializer(qs2,many=True)
+
+        return Response({
+                         "freeboard": rq2.data,
+                         "resumestaff": rq.data,
+
+                        })

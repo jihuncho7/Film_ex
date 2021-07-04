@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-
+    'haystack',
     # thrid apps
     'django_extensions',
     'debug_toolbar',
@@ -88,7 +88,11 @@ CORS_ALLOW_CREDENTIALS = True
 
 
 ROOT_URLCONF = 'djangoProject.urls'
-
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+    },
+}
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
