@@ -44,7 +44,7 @@ INSTALLED_APPS = [
 
     # thrid apps
     'django_extensions',
-    'debug_toolbar',
+    # 'debug_toolbar',
     'corsheaders',
     'django_filters',
     #'social_django',
@@ -114,15 +114,20 @@ WSGI_APPLICATION = 'djangoProject.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': os.path.join(BASE_DIR , 'db.sqlite3'),
         # MariaDB 연동
+
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'team01',
         'USER': 'team01',
         'PASSWORD': '01team',
         'HOST': '49.247.26.104',
         'PORT': '3306',
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'film',
+        # 'USER': 'film',
+        # 'PASSWORD': 'film01q1w2e3',
+        # 'HOST': '3.37.62.95',
+        # 'PORT': '3306',
     }
 }
 

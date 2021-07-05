@@ -1,0 +1,9 @@
+     -e DJANGO_SETTINGS_MODULE=djangoProject.prod \
+     -e AZURE_ACCOUNT_NAME=jjhfilm \
+     -e AZURE_ACCOUNT_KEY="Ojb0k7E9USr2LHe6ZFIV6Wm9S/w+HzNrfily5c2j7MQtDcNa/dSoCi2VmpmtSwcBw3qIvU0RcrkuYxzTsFT6aQ==" \
+     -e ALLOWED_HOSTS=localhost \
+     -e DB_HOST=filmserver.postgres.database.azure.com \
+     -e DB_USER=jjh@filmserver \
+     -e DB_PASSWORD=Qazw1739@@ \
+     -e DB_NAME=postgres \
+      filmjjh

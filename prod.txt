@@ -1,0 +1,5 @@
+-r requirements.txt
+
+django-storages[azure]
+gunicorn
+psycopg2-binary
