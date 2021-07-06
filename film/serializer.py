@@ -12,7 +12,10 @@ class FilmSerializer(serializers.ModelSerializer):
 
     rate_show = serializers.SerializerMethodField()
     author_username = serializers.ReadOnlyField(source='author.username')
+    postfrom = serializers.SerializerMethodField()
 
+    def get_postfrom(self,obj):
+        return '영화리뷰'
 
     def get_rate_show(self, instance):
         return instance.get_rate()
@@ -99,6 +102,13 @@ class HirePostStaffSerializer(serializers.ModelSerializer):
     author_username = serializers.ReadOnlyField(source='author.username')
     tag_set = serializers.SerializerMethodField()
     postfrom = serializers.SerializerMethodField()
+    is_like_user = serializers.SerializerMethodField()
+    is_applied_user = serializers.SerializerMethodField()
+
+    def get_is_applied_user(self, instance):
+        return instance.is_applied_user(self.context['request'].user)
+    def get_is_like_user(self, instance):
+        return instance.is_like_user(self.context['request'].user)
 
     def get_postfrom(self, obj):
         return '스탭 구인'
@@ -112,7 +122,7 @@ class HirePostStaffSerializer(serializers.ModelSerializer):
                   'updated_at', 'title', 'context', 'image', 'category',
                   'tag_set', 'like_user_set', 'payment', 'requirement', 'advantage',
                   'job_loca', 'company', 'company_loca', 'company_desc', 'deadline',
-                  'company_url', 'job_position','postfrom',
+                  'company_url', 'job_position','postfrom','is_like_user','is_applied_user',
                   )
         read_only_fields = read_only_fields_global
 
@@ -136,6 +146,10 @@ class HirePostActorSerializer(serializers.ModelSerializer):
     author_username = serializers.ReadOnlyField(source='author.username')
     tag_set = serializers.SerializerMethodField()
     postfrom = serializers.SerializerMethodField()
+    is_like_user = serializers.SerializerMethodField()
+
+    def get_is_like_user(self, instance):
+        return instance.is_like_user(self.context['request'].user)
 
     def get_postfrom(self, obj):
         return '액터 구인'
@@ -149,7 +163,7 @@ class HirePostActorSerializer(serializers.ModelSerializer):
                   'updated_at', 'title', 'context', 'image', 'category',
                   'tag_set', 'like_user_set', 'payment', 'requirement', 'advantage',
                   'job_loca', 'company', 'company_loca', 'company_desc', 'deadline',
-                  'company_url', 'job_position','postfrom',
+                  'company_url', 'job_position','postfrom','is_like_user',
                   )
         read_only_fields = read_only_fields_global
 
@@ -202,3 +216,45 @@ class QnASerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = read_only_fields_global
 
+class MyHirePostStaffSerializer(serializers.ModelSerializer):
+    author_username = serializers.ReadOnlyField(source='author.username')
+    tag_set = serializers.SerializerMethodField()
+    postfrom = serializers.SerializerMethodField()
+
+    def get_postfrom(self, obj):
+        return '스탭 구인'
+
+    def get_tag_set(self, obj):
+        return obj.extract_tag_list()
+
+    class Meta:
+        model = HirePostStaff
+        fields = ('id', 'hit', 'author_username', 'thumbs', 'created_at',
+                  'updated_at', 'title', 'context', 'image', 'category',
+                  'tag_set', 'like_user_set', 'payment', 'requirement', 'advantage',
+                  'job_loca', 'company', 'company_loca', 'company_desc', 'deadline',
+                  'company_url', 'job_position','postfrom',
+                  )
+        read_only_fields = read_only_fields_global
+
+
+class MyHirePostActorSerializer(serializers.ModelSerializer):
+    author_username = serializers.ReadOnlyField(source='author.username')
+    tag_set = serializers.SerializerMethodField()
+    postfrom = serializers.SerializerMethodField()
+
+    def get_postfrom(self, obj):
+        return '액터 구인'
+
+    def get_tag_set(self, obj):
+        return obj.extract_tag_list()
+
+    class Meta:
+        model = HirePostActor
+        fields = ('id', 'hit', 'author_username', 'thumbs', 'created_at',
+                  'updated_at', 'title', 'context', 'image', 'category',
+                  'tag_set', 'like_user_set', 'payment', 'requirement', 'advantage',
+                  'job_loca', 'company', 'company_loca', 'company_desc', 'deadline',
+                  'company_url', 'job_position','postfrom',
+                  )
+        read_only_fields = read_only_fields_global

@@ -184,6 +184,29 @@ class HirePostStaffViewSet(viewsets.ModelViewSet):
         qs = qs.filter(pk__in=c)
         return qs
 
+    @action(detail=True, methods=['POST'])
+    def like(self, request, pk):
+        post = self.get_object()
+        post.like_user_set.add(self.request.user.pk)
+        return Response(status.HTTP_201_CREATED)
+
+    @like.mapping.delete
+    def unlike(self,request, pk):
+        post = self.get_object()
+        post.like_user_set.remove(self.request.user.pk)
+        return Response(status.HTTP_204_NO_CONTENT)
+
+    @action(detail=True, methods=['POST'])
+    def apply(self, request, pk):
+        post = self.get_object()
+        post.is_applied_set.add(self.request.user.pk)
+        return Response(status.HTTP_201_CREATED)
+
+    @apply.mapping.delete
+    def unapply(self,request, pk):
+        post = self.get_object()
+        post.is_applied_set.remove(self.request.user.pk)
+        return Response(status.HTTP_204_NO_CONTENT)
 
 class HirePostActorViewSet(viewsets.ModelViewSet):
     queryset = HirePostActor.objects.all()
@@ -197,6 +220,18 @@ class HirePostActorViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         author = self.request.user
         serializer.save(author=author)
+
+    @action(detail=True, methods=['POST'])
+    def like(self, request, pk):
+        post = self.get_object()
+        post.like_user_set.add(self.request.user.pk)
+        return Response(status.HTTP_201_CREATED)
+
+    @like.mapping.delete
+    def unlike(self,request, pk):
+        post = self.get_object()
+        post.like_user_set.remove(self.request.user.pk)
+        return Response(status.HTTP_204_NO_CONTENT)
 
 
 class ResumeStaffViewSet(viewsets.ModelViewSet):
@@ -305,8 +340,8 @@ class MypageApplied(APIView):
 
         qs = HirePostStaff.objects.filter(is_applied_set=self.request.user.pk)
         qs2 = HirePostActor.objects.filter(is_applied_set=self.request.user.pk)
-        a = HirePostStaffSerializer(qs, context={'req': 'req'},many=True)
-        b = HirePostActorSerializer(qs2, many=True)
+        a = MyHirePostStaffSerializer(qs,many=True)
+        b = MyHirePostActorSerializer(qs2, many=True)
         return Response(a.data+b.data)
 
 

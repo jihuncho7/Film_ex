@@ -58,9 +58,12 @@ class Film(BaseModelExtend):
 
     def get_rate(self):
         rates = 0
-        for comment in self.comment_set.all():
+        for comment in self.Comment.all():
             rates += comment.rate
-            return rates
+        if not isinstance(rates, int):
+            rates = 0
+        return rates
+
 
     class Meta:
         ordering = ['-created_at']
@@ -173,8 +176,8 @@ class HirePostStaff(BaseModelExtend):
     payment = models.IntegerField()
 
     # 카테고리 시급,주급,일급,월급 초이스
-    # Choices = ('시급', '시급'), ('일급', '일급'), ('주급', '주급'), ('월급', '월급')
-    # wage_choice = models.CharField(max_length=10, choices=Choices)
+    Choices = ('시급', '시급'), ('일급', '일급'), ('주급', '주급'), ('월급', '월급')
+    wage_choice = models.CharField(max_length=10, choices=Choices,blank=True)
 
     tag_set = models.ManyToManyField('TagPostStaff', blank=True)
     # 지원현황
