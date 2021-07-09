@@ -1,5 +1,5 @@
 
-# this App for portfolio as dev settings
+# this App is for a portfolio as in dev settings
 
 Film community & recruit web App
 
